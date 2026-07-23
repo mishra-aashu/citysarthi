@@ -10,13 +10,16 @@ import BookingSummaryScreen from '../screens/customer/BookingSummaryScreen';
 import PaymentScreen from '../screens/customer/PaymentScreen';
 import BookingConfirmationScreen from '../screens/customer/BookingConfirmationScreen';
 import LiveTrackingScreen from '../screens/customer/LiveTrackingScreen';
+import HostDashboardScreen from '../screens/host/HostDashboardScreen';
+import DriverDashboardScreen from '../screens/driver/DriverDashboardScreen';
 import BottomTabBar from '../components/navigation/BottomTabBar';
 import { useTheme } from '../context/ThemeContext';
 
 export default function BottomTabNavigator() {
   const [activeTab, setActiveTab] = useState('Home');
-  const [activeScreen, setActiveScreen] = useState('Main'); // 'Main', 'VehicleDetails', 'BookingSummary', 'Payment', 'BookingConfirmation', 'LiveTracking'
+  const [activeScreen, setActiveScreen] = useState('Main');
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [userRole, setUserRole] = useState('CUSTOMER'); // 'CUSTOMER', 'HOST', 'DRIVER'
   const { colors } = useTheme();
 
   // Navigation handlers
@@ -32,8 +35,21 @@ export default function BottomTabNavigator() {
     setActiveScreen('Main'); // Reset sub-screen when switching main tabs
   };
 
+  const handleRoleChange = (newRole) => {
+    setUserRole(newRole);
+  };
+
   // Render sub-screens or tab screens
   const renderScreen = () => {
+    // Role Overrides
+    if (userRole === 'HOST' && activeTab !== 'Profile') {
+      return <HostDashboardScreen onSwitchRole={handleRoleChange} />;
+    }
+
+    if (userRole === 'DRIVER' && activeTab !== 'Profile') {
+      return <DriverDashboardScreen onSwitchRole={handleRoleChange} />;
+    }
+
     // Check for detailed sub-flow screens first
     if (activeScreen === 'VehicleDetails') {
       return (
@@ -95,7 +111,7 @@ export default function BottomTabNavigator() {
       case 'Support':
         return <SupportScreen />;
       case 'Profile':
-        return <ProfileScreen />;
+        return <ProfileScreen onRoleChange={handleRoleChange} />;
       default:
         return <HomeScreen onSelectVehicle={(v) => navigateTo('VehicleDetails', { vehicle: v })} onNavigateToTab={handleTabChange} />;
     }
