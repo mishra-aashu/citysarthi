@@ -89,7 +89,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
           </View>
 
           {/* Trip Type Segment Control */}
-          <View style={[styles.tripTypeContainer, { backgroundColor: colors.surface }]}>
+          <View style={[styles.tripTypeContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder, borderWidth: 1 }]}>
             <TouchableOpacity
               style={[styles.tripTypeTab, tripType === 'self_drive' && { backgroundColor: colors.primary }]}
               onPress={() => setTripType('self_drive')}
@@ -97,13 +97,12 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
               <MaterialCommunityIcons
                 name="car-key"
                 size={18}
-                color={tripType === 'self_drive' ? colors.white : colors.textMuted}
+                color={tripType === 'self_drive' ? '#000000' : colors.textPrimary}
               />
               <Text
                 style={[
                   styles.tripTabText,
-                  { color: colors.textMuted },
-                  tripType === 'self_drive' && { color: colors.white, fontWeight: '700' },
+                  { color: tripType === 'self_drive' ? '#000000' : colors.textPrimary, fontWeight: '800' },
                 ]}
               >
                 Self-Drive Rental
@@ -117,13 +116,12 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
               <Ionicons
                 name="car"
                 size={18}
-                color={tripType === 'ride' ? colors.white : colors.textMuted}
+                color={tripType === 'ride' ? '#000000' : colors.textPrimary}
               />
               <Text
                 style={[
                   styles.tripTabText,
-                  { color: colors.textMuted },
-                  tripType === 'ride' && { color: colors.white, fontWeight: '700' },
+                  { color: tripType === 'ride' ? '#000000' : colors.textPrimary, fontWeight: '800' },
                 ]}
               >
                 Ride / Taxi
@@ -137,7 +135,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
               {tripType === 'self_drive' ? 'Rent a Vehicle Anywhere, Anytime' : 'Book an Instant Ride'}
             </Text>
 
-            <View style={[styles.inputGroup, { backgroundColor: colors.background, borderColor: colors.surfaceLight }]}>
+            <View style={[styles.inputGroup, { backgroundColor: colors.background, borderColor: colors.cardBorder }]}>
               <Ionicons name="ellipse" size={10} color={colors.success} style={styles.inputDot} />
               <TextInput
                 style={[styles.input, { color: colors.textPrimary }]}
@@ -149,7 +147,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
             </View>
 
             {tripType === 'ride' && (
-              <View style={[styles.inputGroup, { marginTop: 10, backgroundColor: colors.background, borderColor: colors.surfaceLight }]}>
+              <View style={[styles.inputGroup, { marginTop: 10, backgroundColor: colors.background, borderColor: colors.cardBorder }]}>
                 <Ionicons name="location" size={12} color={colors.danger} style={styles.inputDot} />
                 <TextInput
                   style={[styles.input, { color: colors.textPrimary }]}
@@ -165,7 +163,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
               style={[styles.searchBtn, { backgroundColor: colors.primary }]}
               onPress={() => onNavigateToTab && onNavigateToTab('Search')}
             >
-              <Ionicons name="search" size={18} color={colors.white} />
+              <Ionicons name="search" size={18} color="#000000" />
               <Text style={styles.searchBtnText}>
                 {tripType === 'self_drive' ? 'Find Available Vehicles' : 'Search Rides & Fares'}
               </Text>
@@ -358,8 +356,8 @@ const styles = StyleSheet.create({
 
   tripTypeContainer: {
     flexDirection: 'row',
-    padding: 4,
-    borderRadius: 12,
+    padding: 5,
+    borderRadius: 30,
     marginBottom: 16,
   },
   tripTypeTab: {
@@ -368,13 +366,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 10,
-    borderRadius: 8,
+    borderRadius: 24,
     gap: 6,
   },
-  tripTabText: { fontSize: 13, fontWeight: '600' },
+  tripTabText: { fontSize: 13, fontWeight: '700' },
 
   searchCard: {
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
@@ -383,7 +381,7 @@ const styles = StyleSheet.create({
   inputGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 14,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderWidth: 1,
@@ -392,14 +390,14 @@ const styles = StyleSheet.create({
   input: { flex: 1, fontSize: 13 },
   searchBtn: {
     flexDirection: 'row',
-    borderRadius: 10,
-    paddingVertical: 12,
+    borderRadius: 28,
+    paddingVertical: 14,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 14,
     gap: 8,
   },
-  searchBtnText: { color: '#FFFFFF', fontWeight: '700', fontSize: 14 },
+  searchBtnText: { color: '#000000', fontWeight: '800', fontSize: 15, letterSpacing: 0.3 },
 
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   sectionTitle: { fontSize: 17, fontWeight: '700' },

@@ -24,8 +24,8 @@ export const DARK_COLORS = {
   white: '#FFFFFF',
   black: '#000000',
   glass: 'rgba(26, 32, 44, 0.88)',
-  cardBorder: 'rgba(245, 158, 11, 0.22)',
-  subtleBorder: 'rgba(255, 255, 255, 0.08)',
+  cardBorder: '#2D3748',     // Crisp Solid Border Dark
+  subtleBorder: '#4A5568',   // Subtle Border Outline Dark
   inputBg: '#0F141C',
   tabBarBg: '#1A202C',
   promoBg: '#281E15',
@@ -41,7 +41,7 @@ export const LIGHT_COLORS = {
   accent: '#D97706',         // Rich Amber Accent
   background: '#FAF8F5',     // Warm Creamy Ivory Light Canvas
   surface: '#FFFFFF',        // Pure Crisp White Surface
-  surfaceLight: '#EDE7DF',   // Input / Border Surface Light
+  surfaceLight: '#E2E8F0',   // Input / Border Surface Light
   textPrimary: '#0F172A',    // High-Contrast Dark Slate Text
   textSecondary: '#334155',  // Medium Dark Slate Text
   textMuted: '#64748B',      // Slate Muted Text
@@ -51,8 +51,8 @@ export const LIGHT_COLORS = {
   white: '#FFFFFF',
   black: '#000000',
   glass: 'rgba(255, 255, 255, 0.92)',
-  cardBorder: 'rgba(217, 119, 6, 0.18)',
-  subtleBorder: 'rgba(0, 0, 0, 0.08)',
+  cardBorder: '#E2E8F0',     // Crisp Solid Border Light (#E2E8F0)
+  subtleBorder: '#CBD5E1',   // Subtle Border Outline Light (#CBD5E1)
   inputBg: '#F5F1EA',
   tabBarBg: '#FFFFFF',
   promoBg: '#FFF8EE',
@@ -107,14 +107,14 @@ export const SPACING = {
 export const SHADOWS = {
   card: Platform.select({
     web: {
-      boxShadow: '0px 4px 14px rgba(0, 0, 0, 0.12)',
+      boxShadow: '0px 4px 14px rgba(0, 0, 0, 0.08)',
     },
     default: {
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.12,
-      shadowRadius: 8,
-      elevation: 6,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 6,
+      elevation: 3,
     },
   }),
 };

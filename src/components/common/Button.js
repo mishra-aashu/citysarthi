@@ -21,7 +21,7 @@ export default function Button({ title, onPress, variant = 'primary', style, tex
       <Text
         style={[
           styles.text,
-          isSecondary ? { color: colors.textPrimary } : { color: colors.white },
+          isSecondary ? { color: colors.textPrimary } : { color: '#000000' },
           textStyle,
         ]}
       >
@@ -35,9 +35,9 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 14,
     paddingHorizontal: 20,
-    borderRadius: 12,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: { fontSize: 16, fontWeight: '600' },
+  text: { fontSize: 16, fontWeight: '800', letterSpacing: 0.3 },
 });

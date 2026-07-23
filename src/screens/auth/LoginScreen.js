@@ -64,7 +64,7 @@ export default function LoginScreen({ navigation }) {
           ) : (
             <>
               <Text style={styles.submitBtnText}>Get OTP Code</Text>
-              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={18} color="#000000" />
             </>
           )}
         </TouchableOpacity>
@@ -108,13 +108,13 @@ const styles = StyleSheet.create({
   submitBtn: {
     flexDirection: 'row',
     height: 52,
-    borderRadius: 12,
+    borderRadius: 28,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
   },
-  submitBtnText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
+  submitBtnText: { color: '#000000', fontSize: 16, fontWeight: '800' },
   footerRow: { flexDirection: 'row', marginTop: 24 },
   footerText: { fontSize: 14 },
   registerLink: { fontWeight: '700', fontSize: 14 },

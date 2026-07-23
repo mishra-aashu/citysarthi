@@ -239,6 +239,6 @@ const styles = StyleSheet.create({
   cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
   cardPrice: { fontSize: 17, fontWeight: '800' },
   unitText: { fontSize: 11 },
-  selectBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 6 },
-  selectBtnText: { color: '#FFFFFF', fontSize: 12, fontWeight: '700' },
+  selectBtn: { paddingHorizontal: 16, paddingVertical: 7, borderRadius: 20 },
+  selectBtnText: { color: '#000000', fontSize: 12, fontWeight: '800' },
 });
