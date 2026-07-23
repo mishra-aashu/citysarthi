@@ -65,11 +65,18 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     justifyContent: 'space-around',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 12,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px -4px 10px rgba(0, 0, 0, 0.25)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.25,
+        shadowRadius: 10,
+        elevation: 12,
+      },
+    }),
   },
   desktopTabBar: {
     maxWidth: 1200,
