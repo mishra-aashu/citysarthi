@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
 
 const ALL_VEHICLES = [
   {
@@ -128,7 +129,9 @@ export default function SearchScreen({ onSelectVehicle }) {
             onPress={() => onSelectVehicle && onSelectVehicle(v)}
             activeOpacity={0.85}
           >
-            <Image source={{ uri: v.image }} style={styles.cardImg} />
+            <View style={{ width: 120 }}>
+              <VehicleImageCard imageUri={v.image} type={v.type} height={120} />
+            </View>
             <View style={styles.cardInfo}>
               <View style={styles.titleRow}>
                 <Text style={styles.cardTitle}>{v.name}</Text>

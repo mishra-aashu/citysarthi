@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
 
 const { width } = Dimensions.get('window');
 
@@ -242,7 +243,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
             onPress={() => onSelectVehicle && onSelectVehicle(v)}
             activeOpacity={0.85}
           >
-            <Image source={{ uri: v.image }} style={styles.vehicleImg} />
+            <VehicleImageCard imageUri={v.image} type={v.type} height={160} />
             <View style={styles.vehicleBadgeContainer}>
               <Text style={styles.vehicleTypeTag}>{v.type}</Text>
             </View>

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
 
 export default function VehicleDetailsScreen({ vehicle, onBack, onBookNow }) {
   const v = vehicle || {
@@ -42,7 +43,7 @@ export default function VehicleDetailsScreen({ vehicle, onBack, onBookNow }) {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Main Image */}
         <View style={styles.imageContainer}>
-          <Image source={{ uri: v.image }} style={styles.carImg} />
+          <VehicleImageCard imageUri={v.image} type={v.type} height={220} />
           <View style={styles.ratingPill}>
             <Ionicons name="star" size={14} color={COLORS.accent} />
             <Text style={styles.ratingText}>{v.rating} ({v.trips || 120} trips)</Text>
