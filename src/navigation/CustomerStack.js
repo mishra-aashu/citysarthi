@@ -17,6 +17,8 @@ export const CUSTOMER_SCREENS = {
   LiveTracking: LiveTrackingScreen,
 };
 
+import BottomTabNavigator from './BottomTabNavigator';
+
 export default function CustomerStack() {
-  return <HomeScreen />;
+  return <BottomTabNavigator />;
 }
