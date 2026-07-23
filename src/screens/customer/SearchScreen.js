@@ -7,12 +7,11 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Image,
 } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { COLORS } from '../../config/theme';
+import { Ionicons } from '@expo/vector-icons';
 import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
+import { useTheme } from '../../context/ThemeContext';
 
 const ALL_VEHICLES = [
   {
@@ -74,6 +73,7 @@ const FILTERS = ['All', 'SUV', 'Sedan', 'Hatchback', 'Electric', 'Auto', 'Bike']
 export default function SearchScreen({ onSelectVehicle }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const { colors } = useTheme();
 
   const filteredVehicles = ALL_VEHICLES.filter((v) => {
     const matchesFilter = activeFilter === 'All' || v.category === activeFilter || v.type.includes(activeFilter);
@@ -83,149 +83,162 @@ export default function SearchScreen({ onSelectVehicle }) {
 
   return (
     <ResponsiveContainer>
-      <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Search Vehicles</Text>
-        <Text style={styles.subtitle}>Find cars, bikes, autos & tempos near you</Text>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.cardBorder }]}>
+          <Text style={[styles.title, { color: colors.textPrimary }]}>Search Vehicles</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            Find cars, bikes, autos & tempos near you
+          </Text>
 
-        {/* Search Bar Input */}
-        <View style={styles.searchBarContainer}>
-          <Ionicons name="search" size={20} color={COLORS.textMuted} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search by car model, location or brand..."
-            placeholderTextColor={COLORS.textMuted}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={18} color={COLORS.textMuted} />
-            </TouchableOpacity>
-          )}
+          {/* Search Bar Input */}
+          <View style={[styles.searchBarContainer, { backgroundColor: colors.background, borderColor: colors.surfaceLight }]}>
+            <Ionicons name="search" size={20} color={colors.textMuted} />
+            <TextInput
+              style={[styles.searchInput, { color: colors.textPrimary }]}
+              placeholder="Search by car model, location or brand..."
+              placeholderTextColor={colors.textMuted}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')}>
+                <Ionicons name="close-circle" size={18} color={colors.textMuted} />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Filter Pills */}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScroll}>
+            {FILTERS.map((f) => (
+              <TouchableOpacity
+                key={f}
+                style={[
+                  styles.filterChip,
+                  { backgroundColor: colors.background, borderColor: colors.surfaceLight },
+                  activeFilter === f && { backgroundColor: colors.primary, borderColor: colors.primary },
+                ]}
+                onPress={() => setActiveFilter(f)}
+              >
+                <Text
+                  style={[
+                    styles.filterText,
+                    { color: colors.textMuted },
+                    activeFilter === f && { color: colors.white, fontWeight: '700' },
+                  ]}
+                >
+                  {f}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
 
-        {/* Filter Pills */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScroll}>
-          {FILTERS.map((f) => (
+        <ScrollView contentContainerStyle={styles.listContent} showsVerticalScrollIndicator={false}>
+          <Text style={[styles.resultCount, { color: colors.textMuted }]}>
+            Showing {filteredVehicles.length} vehicles
+          </Text>
+
+          {filteredVehicles.map((v) => (
             <TouchableOpacity
-              key={f}
-              style={[styles.filterChip, activeFilter === f && styles.activeFilterChip]}
-              onPress={() => setActiveFilter(f)}
+              key={v.id}
+              style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+              onPress={() => onSelectVehicle && onSelectVehicle(v)}
+              activeOpacity={0.85}
             >
-              <Text style={[styles.filterText, activeFilter === f && styles.activeFilterText]}>
-                {f}
-              </Text>
+              <View style={{ width: 120 }}>
+                <VehicleImageCard imageUri={v.image} type={v.type} height={120} />
+              </View>
+              <View style={styles.cardInfo}>
+                <View style={styles.titleRow}>
+                  <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>{v.name}</Text>
+                  <View style={styles.ratingBadge}>
+                    <Ionicons name="star" size={12} color={colors.accent} />
+                    <Text style={[styles.ratingText, { color: colors.accent }]}>{v.rating}</Text>
+                  </View>
+                </View>
+
+                <Text style={[styles.cardLoc, { color: colors.textMuted }]}>
+                  <Ionicons name="location" size={12} color={colors.primaryLight} /> {v.location}
+                </Text>
+
+                <View style={styles.tagRow}>
+                  <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
+                    {v.type}
+                  </Text>
+                  <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
+                    {v.fuel}
+                  </Text>
+                  <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
+                    {v.transmission}
+                  </Text>
+                </View>
+
+                <View style={styles.cardFooter}>
+                  <Text style={[styles.cardPrice, { color: colors.primaryLight }]}>
+                    ₹{v.price}<Text style={[styles.unitText, { color: colors.textMuted }]}>/hr</Text>
+                  </Text>
+                  <TouchableOpacity
+                    style={[styles.selectBtn, { backgroundColor: colors.primary }]}
+                    onPress={() => onSelectVehicle && onSelectVehicle(v)}
+                  >
+                    <Text style={styles.selectBtnText}>Select</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
-      </View>
-
-      <ScrollView contentContainerStyle={styles.listContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.resultCount}>Showing {filteredVehicles.length} vehicles</Text>
-
-        {filteredVehicles.map((v) => (
-          <TouchableOpacity
-            key={v.id}
-            style={styles.card}
-            onPress={() => onSelectVehicle && onSelectVehicle(v)}
-            activeOpacity={0.85}
-          >
-            <View style={{ width: 120 }}>
-              <VehicleImageCard imageUri={v.image} type={v.type} height={120} />
-            </View>
-            <View style={styles.cardInfo}>
-              <View style={styles.titleRow}>
-                <Text style={styles.cardTitle}>{v.name}</Text>
-                <View style={styles.ratingBadge}>
-                  <Ionicons name="star" size={12} color={COLORS.accent} />
-                  <Text style={styles.ratingText}>{v.rating}</Text>
-                </View>
-              </View>
-
-              <Text style={styles.cardLoc}>
-                <Ionicons name="location" size={12} color={COLORS.primaryLight} /> {v.location}
-              </Text>
-
-              <View style={styles.tagRow}>
-                <Text style={styles.tag}>{v.type}</Text>
-                <Text style={styles.tag}>{v.fuel}</Text>
-                <Text style={styles.tag}>{v.transmission}</Text>
-              </View>
-
-              <View style={styles.cardFooter}>
-                <Text style={styles.cardPrice}>₹{v.price}<Text style={styles.unitText}>/hr</Text></Text>
-                <TouchableOpacity
-                  style={styles.selectBtn}
-                  onPress={() => onSelectVehicle && onSelectVehicle(v)}
-                >
-                  <Text style={styles.selectBtnText}>Select</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
     </ResponsiveContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  header: { padding: 16, backgroundColor: COLORS.surface, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.06)' },
-  title: { fontSize: 22, fontWeight: '800', color: COLORS.textPrimary },
-  subtitle: { fontSize: 13, color: COLORS.textSecondary, marginTop: 2 },
+  container: { flex: 1 },
+  header: { padding: 16, borderBottomWidth: 1 },
+  title: { fontSize: 22, fontWeight: '800' },
+  subtitle: { fontSize: 13, marginTop: 2 },
   searchBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.background,
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginTop: 12,
     borderWidth: 1,
-    borderColor: COLORS.surfaceLight,
     gap: 8,
   },
-  searchInput: { flex: 1, color: COLORS.textPrimary, fontSize: 14 },
+  searchInput: { flex: 1, fontSize: 14 },
   filtersScroll: { marginTop: 12, marginHorizontal: -16, paddingHorizontal: 16 },
   filterChip: {
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: COLORS.background,
     marginRight: 8,
     borderWidth: 1,
-    borderColor: COLORS.surfaceLight,
   },
-  activeFilterChip: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
-  filterText: { fontSize: 12, fontWeight: '600', color: COLORS.textMuted },
-  activeFilterText: { color: COLORS.white },
+  filterText: { fontSize: 12, fontWeight: '600' },
 
   listContent: { padding: 16 },
-  resultCount: { fontSize: 12, color: COLORS.textMuted, marginBottom: 12, fontWeight: '600' },
+  resultCount: { fontSize: 12, marginBottom: 12, fontWeight: '600' },
   card: {
-    backgroundColor: COLORS.surface,
     borderRadius: 14,
     marginBottom: 14,
     flexDirection: 'row',
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
   },
-  cardImg: { width: 120, height: '100%', backgroundColor: COLORS.surfaceLight },
   cardInfo: { flex: 1, padding: 12 },
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  cardTitle: { fontSize: 15, fontWeight: '700', color: COLORS.textPrimary },
+  cardTitle: { fontSize: 15, fontWeight: '700' },
   ratingBadge: { flexDirection: 'row', alignItems: 'center', gap: 2 },
-  ratingText: { fontSize: 12, fontWeight: '700', color: COLORS.accent },
-  cardLoc: { fontSize: 11, color: COLORS.textMuted, marginTop: 4 },
+  ratingText: { fontSize: 12, fontWeight: '700' },
+  cardLoc: { fontSize: 11, marginTop: 4 },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 8 },
-  tag: { fontSize: 10, color: COLORS.textSecondary, backgroundColor: COLORS.background, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 },
+  tag: { fontSize: 10, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 },
   cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
-  cardPrice: { fontSize: 17, fontWeight: '800', color: COLORS.primaryLight },
-  unitText: { fontSize: 11, color: COLORS.textMuted },
-  selectBtn: { backgroundColor: COLORS.primary, paddingHorizontal: 14, paddingVertical: 6, borderRadius: 6 },
-  selectBtnText: { color: COLORS.white, fontSize: 12, fontWeight: '700' },
+  cardPrice: { fontSize: 17, fontWeight: '800' },
+  unitText: { fontSize: 11 },
+  selectBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 6 },
+  selectBtnText: { color: '#FFFFFF', fontSize: 12, fontWeight: '700' },
 });

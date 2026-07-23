@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../config/theme';
+import { useTheme } from '../../context/ThemeContext';
 
 const TABS = [
   { id: 'Home', label: 'Home', icon: 'home', iconOutline: 'home-outline' },
@@ -11,15 +11,20 @@ const TABS = [
   { id: 'Profile', label: 'Profile', icon: 'person', iconOutline: 'person-outline' },
 ];
 
-import { useWindowDimensions } from 'react-native';
-
 export default function BottomTabBar({ activeTab, onTabChange }) {
   const { width } = useWindowDimensions();
+  const { colors } = useTheme();
   const isDesktop = width >= 768;
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.tabBar, isDesktop && styles.desktopTabBar]}>
+    <View style={[styles.container, { backgroundColor: colors.background, borderTopColor: colors.cardBorder }]}>
+      <View
+        style={[
+          styles.tabBar,
+          { backgroundColor: colors.surface },
+          isDesktop && [styles.desktopTabBar, { borderColor: colors.cardBorder }],
+        ]}
+      >
         {TABS.map((tab) => {
           const isActive = activeTab === tab.id;
           const iconName = isActive ? tab.icon : tab.iconOutline;
@@ -27,7 +32,10 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
           return (
             <TouchableOpacity
               key={tab.id}
-              style={[styles.tabItem, isActive && styles.activeTabItem]}
+              style={[
+                styles.tabItem,
+                isActive && { backgroundColor: 'rgba(37, 99, 235, 0.1)' },
+              ]}
               onPress={() => onTabChange(tab.id)}
               activeOpacity={0.7}
             >
@@ -35,11 +43,17 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
                 <Ionicons
                   name={iconName}
                   size={22}
-                  color={isActive ? COLORS.primaryLight : COLORS.textMuted}
+                  color={isActive ? colors.primaryLight : colors.textMuted}
                 />
-                {isActive && <View style={styles.activeDot} />}
+                {isActive && <View style={[styles.activeDot, { backgroundColor: colors.primaryLight }]} />}
               </View>
-              <Text style={[styles.tabLabel, isActive && styles.activeTabLabel]}>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  { color: isActive ? colors.primaryLight : colors.textMuted },
+                  isActive && styles.activeTabLabel,
+                ]}
+              >
                 {tab.label}
               </Text>
             </TouchableOpacity>
@@ -52,9 +66,7 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
   },
   tabBar: {
     flexDirection: 'row',
@@ -62,19 +74,18 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 16 : 8,
     paddingTop: 8,
     paddingHorizontal: 8,
-    backgroundColor: COLORS.surface,
     justifyContent: 'space-around',
     alignItems: 'center',
     ...Platform.select({
       web: {
-        boxShadow: '0px -4px 10px rgba(0, 0, 0, 0.25)',
+        boxShadow: '0px -4px 10px rgba(0, 0, 0, 0.1)',
       },
       default: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: -4 },
-        shadowOpacity: 0.25,
-        shadowRadius: 10,
-        elevation: 12,
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 8,
       },
     }),
   },
@@ -85,7 +96,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   tabItem: {
     flex: 1,
@@ -93,9 +103,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 4,
     borderRadius: 12,
-  },
-  activeTabItem: {
-    backgroundColor: 'rgba(37, 99, 235, 0.08)',
   },
   iconContainer: {
     alignItems: 'center',
@@ -113,16 +120,13 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: COLORS.primaryLight,
   },
   tabLabel: {
     fontSize: 11,
     fontWeight: '500',
-    color: COLORS.textMuted,
     marginTop: 3,
   },
   activeTabLabel: {
-    color: COLORS.primaryLight,
     fontWeight: '700',
   },
 });

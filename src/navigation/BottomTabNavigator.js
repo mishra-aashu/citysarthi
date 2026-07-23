@@ -11,12 +11,13 @@ import PaymentScreen from '../screens/customer/PaymentScreen';
 import BookingConfirmationScreen from '../screens/customer/BookingConfirmationScreen';
 import LiveTrackingScreen from '../screens/customer/LiveTrackingScreen';
 import BottomTabBar from '../components/navigation/BottomTabBar';
-import { COLORS } from '../config/theme';
+import { useTheme } from '../context/ThemeContext';
 
 export default function BottomTabNavigator() {
   const [activeTab, setActiveTab] = useState('Home');
   const [activeScreen, setActiveScreen] = useState('Main'); // 'Main', 'VehicleDetails', 'BookingSummary', 'Payment', 'BookingConfirmation', 'LiveTracking'
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const { colors } = useTheme();
 
   // Navigation handlers
   const navigateTo = (screenName, params = {}) => {
@@ -101,7 +102,7 @@ export default function BottomTabNavigator() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
         {renderScreen()}
       </View>
@@ -113,7 +114,6 @@ export default function BottomTabNavigator() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   content: {
     flex: 1,

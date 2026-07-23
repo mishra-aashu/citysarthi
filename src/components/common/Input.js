@@ -1,17 +1,26 @@
 import React from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
-import { COLORS } from '../../config/theme';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function Input({ label, value, onChangeText, placeholder, secureTextEntry }) {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>}
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            backgroundColor: colors.inputBg || colors.surface,
+            borderColor: colors.surfaceLight,
+            color: colors.textPrimary,
+          },
+        ]}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.textMuted}
+        placeholderTextColor={colors.textMuted}
         secureTextEntry={secureTextEntry}
       />
     </View>
@@ -20,15 +29,12 @@ export default function Input({ label, value, onChangeText, placeholder, secureT
 
 const styles = StyleSheet.create({
   container: { marginVertical: 8 },
-  label: { fontSize: 14, color: COLORS.textSecondary, marginBottom: 6 },
+  label: { fontSize: 14, marginBottom: 6 },
   input: {
-    backgroundColor: COLORS.surface,
     borderWidth: 1,
-    borderColor: COLORS.surfaceLight,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    color: COLORS.textPrimary,
     fontSize: 16,
   },
 });

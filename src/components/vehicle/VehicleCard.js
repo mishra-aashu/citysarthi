@@ -1,23 +1,37 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { COLORS } from '../../config/theme';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function VehicleCard({ vehicle, onPress }) {
+  const { colors } = useTheme();
+
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
+    <TouchableOpacity
+      style={[
+        styles.card,
+        {
+          backgroundColor: colors.surface,
+          borderColor: colors.cardBorder,
+        },
+      ]}
+      onPress={onPress}
+      activeOpacity={0.85}
+    >
       <View style={styles.header}>
-        <Text style={styles.name}>{vehicle?.name || 'Vehicle Name'}</Text>
-        <Text style={styles.price}>₹{vehicle?.price || '999'}/day</Text>
+        <Text style={[styles.name, { color: colors.textPrimary }]}>{vehicle?.name || 'Vehicle Name'}</Text>
+        <Text style={[styles.price, { color: colors.primaryLight }]}>₹{vehicle?.price || '999'}/day</Text>
       </View>
-      <Text style={styles.category}>{vehicle?.category || 'Sedan'} • {vehicle?.fuelType || 'Petrol'}</Text>
+      <Text style={[styles.category, { color: colors.textSecondary }]}>
+        {vehicle?.category || 'Sedan'} • {vehicle?.fuelType || 'Petrol'}
+      </Text>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: COLORS.surface, borderRadius: 14, padding: 14, marginVertical: 6, borderWidth: 1, borderColor: COLORS.surfaceLight },
+  card: { borderRadius: 14, padding: 14, marginVertical: 6, borderWidth: 1 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  name: { fontSize: 16, fontWeight: 'bold', color: COLORS.textPrimary },
-  price: { fontSize: 16, fontWeight: 'bold', color: COLORS.primary },
-  category: { fontSize: 13, color: COLORS.textSecondary, marginTop: 4 },
+  name: { fontSize: 16, fontWeight: 'bold' },
+  price: { fontSize: 16, fontWeight: 'bold' },
+  category: { fontSize: 13, marginTop: 4 },
 });

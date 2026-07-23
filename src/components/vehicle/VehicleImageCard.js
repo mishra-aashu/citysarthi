@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../config/theme';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function VehicleImageCard({ imageUri, type, height = 150 }) {
   const [hasError, setHasError] = useState(false);
+  const { colors } = useTheme();
 
   const getIconForType = (t = '') => {
     const lower = t.toLowerCase();
@@ -19,13 +20,20 @@ export default function VehicleImageCard({ imageUri, type, height = 150 }) {
 
   if (!imageUri || hasError) {
     return (
-      <View style={[styles.placeholderContainer, { height }]}>
+      <View
+        style={[
+          styles.placeholderContainer,
+          { height, backgroundColor: colors.surfaceLight, borderBottomColor: colors.cardBorder },
+        ]}
+      >
         <View style={styles.iconCircle}>
-          <MaterialCommunityIcons name={getIconForType(type)} size={48} color={COLORS.primaryLight} />
+          <MaterialCommunityIcons name={getIconForType(type)} size={48} color={colors.primaryLight} />
         </View>
         <View style={styles.badgeRow}>
-          <Ionicons name="car-sport" size={14} color={COLORS.accent} />
-          <Text style={styles.placeholderText}>CitySarthi Verified Vehicle</Text>
+          <Ionicons name="car-sport" size={14} color={colors.accent} />
+          <Text style={[styles.placeholderText, { color: colors.textMuted }]}>
+            CitySarthi Verified Vehicle
+          </Text>
         </View>
       </View>
     );
@@ -34,7 +42,7 @@ export default function VehicleImageCard({ imageUri, type, height = 150 }) {
   return (
     <Image
       source={{ uri: imageUri }}
-      style={[styles.img, { height }]}
+      style={[styles.img, { height, backgroundColor: colors.surfaceLight }]}
       onError={() => setHasError(true)}
     />
   );
@@ -43,15 +51,12 @@ export default function VehicleImageCard({ imageUri, type, height = 150 }) {
 const styles = StyleSheet.create({
   img: {
     width: '100%',
-    backgroundColor: COLORS.surfaceLight,
   },
   placeholderContainer: {
     width: '100%',
-    backgroundColor: 'rgba(30, 41, 59, 0.95)',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
   },
   iconCircle: {
     width: 72,
@@ -70,7 +75,6 @@ const styles = StyleSheet.create({
   placeholderText: {
     fontSize: 11,
     fontWeight: '700',
-    color: COLORS.textMuted,
     letterSpacing: 0.5,
   },
 });
