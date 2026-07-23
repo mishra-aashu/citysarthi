@@ -10,6 +10,7 @@ import {
   TextInput,
   Alert,
   Switch,
+  useWindowDimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
@@ -26,7 +27,10 @@ import {
 import KYCScreen from '../auth/KYCScreen';
 
 export default function ProfileScreen({ onRoleChange, onLogout }) {
+  const { width } = useWindowDimensions();
   const { colors, themeMode, setThemeMode, isDark } = useTheme();
+  const isDesktop = width >= 768;
+
 
   // State
   const [walletBalance, setWalletBalance] = useState(1450.00);
@@ -139,206 +143,214 @@ export default function ProfileScreen({ onRoleChange, onLogout }) {
         </View>
 
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          {/* User Card */}
-          <View style={[styles.userCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-            <View style={[styles.avatarCircle, { backgroundColor: colors.primary }]}>
-              <Text style={styles.avatarText}>AS</Text>
-            </View>
-            <View style={styles.userInfo}>
-              <Text style={[styles.userName, { color: colors.textPrimary }]}>Aashu Sharma</Text>
-              <Text style={[styles.userPhone, { color: colors.textMuted }]}>
-                +91 98765 43210 • aashu@example.com
-              </Text>
-              <TouchableOpacity style={styles.kycBadge} onPress={() => setShowKycModal(true)}>
-                <Ionicons name="checkmark-seal" size={14} color={colors.success} />
-                <Text style={[styles.kycText, { color: colors.success }]}>
-                  KYC Verified (Driving License & Aadhaar)
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Role Mode Switcher (Customer / Host / Driver) */}
-          <View style={[styles.roleSwitchCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-            <Text style={[styles.roleLabel, { color: colors.textMuted }]}>ACTIVE PLATFORM MODE</Text>
-            <View style={styles.roleBtnGroup}>
-              {[
-                { id: 'CUSTOMER', label: 'Renter / Rider', icon: 'car' },
-                { id: 'HOST', label: 'Vehicle Host', icon: 'business' },
-                { id: 'DRIVER', label: 'Driver Captain', icon: 'person' },
-              ].map((r) => (
-                <TouchableOpacity
-                  key={r.id}
-                  style={[
-                    styles.roleToggleBtn,
-                    { backgroundColor: colors.background, borderColor: colors.cardBorder },
-                    userRole === r.id && { backgroundColor: colors.primary, borderColor: colors.primary },
-                  ]}
-                  onPress={() => handleRoleSelect(r.id)}
-                >
-                  <Ionicons name={r.icon} size={16} color={userRole === r.id ? '#000000' : colors.textMuted} />
-                  <Text style={[styles.roleToggleText, { color: userRole === r.id ? '#000000' : colors.textSecondary }, userRole === r.id && { fontWeight: '800' }]}>
-                    {r.label}
+          <View style={isDesktop ? styles.desktopRow : null}>
+            {/* Left Column (User card, Platform Mode, Theme, Wallet) */}
+            <View style={isDesktop ? styles.desktopCol : null}>
+              {/* User Card */}
+              <View style={[styles.userCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+                <View style={[styles.avatarCircle, { backgroundColor: colors.primary }]}>
+                  <Text style={styles.avatarText}>AS</Text>
+                </View>
+                <View style={styles.userInfo}>
+                  <Text style={[styles.userName, { color: colors.textPrimary }]}>Aashu Sharma</Text>
+                  <Text style={[styles.userPhone, { color: colors.textMuted }]}>
+                    +91 98765 43210 • aashu@example.com
                   </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+                  <TouchableOpacity style={styles.kycBadge} onPress={() => setShowKycModal(true)}>
+                    <Ionicons name="checkmark-seal" size={14} color={colors.success} />
+                    <Text style={[styles.kycText, { color: colors.success }]}>
+                      KYC Verified (Driving License & Aadhaar)
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          {/* Theme Selector Section */}
-          <View style={[styles.themeCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-            <View style={styles.themeHeader}>
-              <Ionicons name={isDark ? "moon" : "sunny"} size={20} color={colors.primaryLight} />
-              <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text style={[styles.themeTitle, { color: colors.textPrimary }]}>App Appearance & Theme</Text>
-                <Text style={[styles.themeSubtitle, { color: colors.textMuted }]}>
-                  Choose Light, Dark, or System mode
-                </Text>
+              {/* Role Mode Switcher (Customer / Host / Driver) */}
+              <View style={[styles.roleSwitchCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+                <Text style={[styles.roleLabel, { color: colors.textMuted }]}>ACTIVE PLATFORM MODE</Text>
+                <View style={styles.roleBtnGroup}>
+                  {[
+                    { id: 'CUSTOMER', label: 'Renter / Rider', icon: 'car' },
+                    { id: 'HOST', label: 'Vehicle Host', icon: 'business' },
+                    { id: 'DRIVER', label: 'Driver Captain', icon: 'person' },
+                  ].map((r) => (
+                    <TouchableOpacity
+                      key={r.id}
+                      style={[
+                        styles.roleToggleBtn,
+                        { backgroundColor: colors.background, borderColor: colors.cardBorder },
+                        userRole === r.id && { backgroundColor: colors.primary, borderColor: colors.primary },
+                      ]}
+                      onPress={() => handleRoleSelect(r.id)}
+                    >
+                      <Ionicons name={r.icon} size={16} color={userRole === r.id ? '#000000' : colors.textMuted} />
+                      <Text style={[styles.roleToggleText, { color: userRole === r.id ? '#000000' : colors.textSecondary }, userRole === r.id && { fontWeight: '800' }]}>
+                        {r.label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {/* Theme Selector Section */}
+              <View style={[styles.themeCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+                <View style={styles.themeHeader}>
+                  <Ionicons name={isDark ? "moon" : "sunny"} size={20} color={colors.primaryLight} />
+                  <View style={{ flex: 1, marginLeft: 10 }}>
+                    <Text style={[styles.themeTitle, { color: colors.textPrimary }]}>App Appearance & Theme</Text>
+                    <Text style={[styles.themeSubtitle, { color: colors.textMuted }]}>
+                      Choose Light, Dark, or System mode
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={styles.themeOptionsRow}>
+                  <TouchableOpacity
+                    style={[
+                      styles.themeOptionBtn,
+                      { backgroundColor: colors.background, borderColor: colors.cardBorder },
+                      themeMode === 'light' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
+                    ]}
+                    onPress={() => setThemeMode('light')}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons
+                      name="sunny-outline"
+                      size={18}
+                      color={themeMode === 'light' ? colors.primaryLight : colors.textMuted}
+                    />
+                    <Text
+                      style={[
+                        styles.themeOptionText,
+                        { color: themeMode === 'light' ? colors.primaryLight : colors.textSecondary },
+                        themeMode === 'light' && { fontWeight: '700' },
+                      ]}
+                    >
+                      Light Mode
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.themeOptionBtn,
+                      { backgroundColor: colors.background, borderColor: colors.cardBorder },
+                      themeMode === 'dark' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
+                    ]}
+                    onPress={() => setThemeMode('dark')}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons
+                      name="moon-outline"
+                      size={18}
+                      color={themeMode === 'dark' ? colors.primaryLight : colors.textMuted}
+                    />
+                    <Text
+                      style={[
+                        styles.themeOptionText,
+                        { color: themeMode === 'dark' ? colors.primaryLight : colors.textSecondary },
+                        themeMode === 'dark' && { fontWeight: '700' },
+                      ]}
+                    >
+                      Dark Mode
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.themeOptionBtn,
+                      { backgroundColor: colors.background, borderColor: colors.cardBorder },
+                      themeMode === 'system' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
+                    ]}
+                    onPress={() => setThemeMode('system')}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons
+                      name="phone-portrait-outline"
+                      size={18}
+                      color={themeMode === 'system' ? colors.primaryLight : colors.textMuted}
+                    />
+                    <Text
+                      style={[
+                        styles.themeOptionText,
+                        { color: themeMode === 'system' ? colors.primaryLight : colors.textSecondary },
+                        themeMode === 'system' && { fontWeight: '700' },
+                      ]}
+                    >
+                      System
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Wallet Card */}
+              <View style={[styles.walletCard, { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary }]}>
+                <View>
+                  <Text style={[styles.walletLabel, { color: colors.textMuted }]}>CitySarthi Wallet Balance</Text>
+                  <Text style={[styles.walletVal, { color: colors.primaryLight }]}>₹{walletBalance.toFixed(2)}</Text>
+                </View>
+                <TouchableOpacity style={[styles.addMoneyBtn, { backgroundColor: colors.primary }]} onPress={() => setShowWalletModal(true)}>
+                  <Ionicons name="add-circle" size={16} color="#000000" />
+                  <Text style={styles.addMoneyText}>Add Money</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
-            <View style={styles.themeOptionsRow}>
-              <TouchableOpacity
-                style={[
-                  styles.themeOptionBtn,
-                  { backgroundColor: colors.background, borderColor: colors.cardBorder },
-                  themeMode === 'light' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
-                ]}
-                onPress={() => setThemeMode('light')}
-                activeOpacity={0.8}
-              >
-                <Ionicons
-                  name="sunny-outline"
-                  size={18}
-                  color={themeMode === 'light' ? colors.primaryLight : colors.textMuted}
-                />
-                <Text
-                  style={[
-                    styles.themeOptionText,
-                    { color: themeMode === 'light' ? colors.primaryLight : colors.textSecondary },
-                    themeMode === 'light' && { fontWeight: '700' },
-                  ]}
-                >
-                  Light Mode
-                </Text>
-              </TouchableOpacity>
+            {/* Right Column (Saved Payments, Addresses, KYC, Settings, Privacy) */}
+            <View style={isDesktop ? styles.desktopCol : null}>
+              {/* Menu Sections */}
+              <View style={[styles.menuGroup, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+                <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowPaymentModal(true)}>
+                  <Ionicons name="card-outline" size={20} color={colors.primaryLight} />
+                  <Text style={[styles.menuText, { color: colors.textPrimary }]}>Saved Payment Methods</Text>
+                  <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[
-                  styles.themeOptionBtn,
-                  { backgroundColor: colors.background, borderColor: colors.cardBorder },
-                  themeMode === 'dark' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
-                ]}
-                onPress={() => setThemeMode('dark')}
-                activeOpacity={0.8}
-              >
-                <Ionicons
-                  name="moon-outline"
-                  size={18}
-                  color={themeMode === 'dark' ? colors.primaryLight : colors.textMuted}
-                />
-                <Text
-                  style={[
-                    styles.themeOptionText,
-                    { color: themeMode === 'dark' ? colors.primaryLight : colors.textSecondary },
-                    themeMode === 'dark' && { fontWeight: '700' },
-                  ]}
-                >
-                  Dark Mode
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowAddressModal(true)}>
+                  <Ionicons name="location-outline" size={20} color={colors.primaryLight} />
+                  <Text style={[styles.menuText, { color: colors.textPrimary }]}>Saved Addresses & Locations</Text>
+                  <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[
-                  styles.themeOptionBtn,
-                  { backgroundColor: colors.background, borderColor: colors.cardBorder },
-                  themeMode === 'system' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
-                ]}
-                onPress={() => setThemeMode('system')}
-                activeOpacity={0.8}
-              >
-                <Ionicons
-                  name="phone-portrait-outline"
-                  size={18}
-                  color={themeMode === 'system' ? colors.primaryLight : colors.textMuted}
-                />
-                <Text
-                  style={[
-                    styles.themeOptionText,
-                    { color: themeMode === 'system' ? colors.primaryLight : colors.textSecondary },
-                    themeMode === 'system' && { fontWeight: '700' },
-                  ]}
+                <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowKycModal(true)}>
+                  <Ionicons name="document-attach-outline" size={20} color={colors.primaryLight} />
+                  <Text style={[styles.menuText, { color: colors.textPrimary }]}>Manage Driving License & KYC</Text>
+                  <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]} onPress={() => setShowReferralModal(true)}>
+                  <Ionicons name="gift-outline" size={20} color={colors.accent} />
+                  <Text style={[styles.menuText, { color: colors.textPrimary }]}>Refer & Earn ₹250</Text>
+                  <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                </TouchableOpacity>
+              </View>
+
+              <View style={[styles.menuGroup, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+                <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowSettingsModal(true)}>
+                  <Ionicons name="settings-outline" size={20} color={colors.textSecondary} />
+                  <Text style={[styles.menuText, { color: colors.textPrimary }]}>App Settings & Notifications</Text>
+                  <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowTermsModal(true)}>
+                  <Ionicons name="shield-checkmark-outline" size={20} color={colors.textSecondary} />
+                  <Text style={[styles.menuText, { color: colors.textPrimary }]}>Privacy Policy & Terms</Text>
+                  <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.menuItem, { borderBottomWidth: 0 }]}
+                  onPress={() => {
+                    Alert.alert('Log Out', 'Are you sure you want to log out of CitySarthi?', [
+                      { text: 'Cancel', style: 'cancel' },
+                      { text: 'Log Out', style: 'destructive', onPress: () => onLogout && onLogout() },
+                    ]);
+                  }}
                 >
-                  System
-                </Text>
-              </TouchableOpacity>
+                  <Ionicons name="log-out-outline" size={20} color={colors.danger} />
+                  <Text style={[styles.menuText, { color: colors.danger }]}>Log Out</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-
-          {/* Wallet Card */}
-          <View style={[styles.walletCard, { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary }]}>
-            <View>
-              <Text style={[styles.walletLabel, { color: colors.textMuted }]}>CitySarthi Wallet Balance</Text>
-              <Text style={[styles.walletVal, { color: colors.primaryLight }]}>₹{walletBalance.toFixed(2)}</Text>
-            </View>
-            <TouchableOpacity style={[styles.addMoneyBtn, { backgroundColor: colors.primary }]} onPress={() => setShowWalletModal(true)}>
-              <Ionicons name="add-circle" size={16} color="#000000" />
-              <Text style={styles.addMoneyText}>Add Money</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Menu Sections */}
-          <View style={[styles.menuGroup, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-            <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowPaymentModal(true)}>
-              <Ionicons name="card-outline" size={20} color={colors.primaryLight} />
-              <Text style={[styles.menuText, { color: colors.textPrimary }]}>Saved Payment Methods</Text>
-              <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowAddressModal(true)}>
-              <Ionicons name="location-outline" size={20} color={colors.primaryLight} />
-              <Text style={[styles.menuText, { color: colors.textPrimary }]}>Saved Addresses & Locations</Text>
-              <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowKycModal(true)}>
-              <Ionicons name="document-attach-outline" size={20} color={colors.primaryLight} />
-              <Text style={[styles.menuText, { color: colors.textPrimary }]}>Manage Driving License & KYC</Text>
-              <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]} onPress={() => setShowReferralModal(true)}>
-              <Ionicons name="gift-outline" size={20} color={colors.accent} />
-              <Text style={[styles.menuText, { color: colors.textPrimary }]}>Refer & Earn ₹250</Text>
-              <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.menuGroup, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-            <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowSettingsModal(true)}>
-              <Ionicons name="settings-outline" size={20} color={colors.textSecondary} />
-              <Text style={[styles.menuText, { color: colors.textPrimary }]}>App Settings & Notifications</Text>
-              <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.subtleBorder }]} onPress={() => setShowTermsModal(true)}>
-              <Ionicons name="shield-checkmark-outline" size={20} color={colors.textSecondary} />
-              <Text style={[styles.menuText, { color: colors.textPrimary }]}>Privacy Policy & Terms</Text>
-              <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.menuItem, { borderBottomWidth: 0 }]}
-              onPress={() => {
-                Alert.alert('Log Out', 'Are you sure you want to log out of CitySarthi?', [
-                  { text: 'Cancel', style: 'cancel' },
-                  { text: 'Log Out', style: 'destructive', onPress: () => onLogout && onLogout() },
-                ]);
-              }}
-            >
-              <Ionicons name="log-out-outline" size={20} color={colors.danger} />
-              <Text style={[styles.menuText, { color: colors.danger }]}>Log Out</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
 
@@ -763,4 +775,13 @@ const styles = StyleSheet.create({
 
   policyHeading: { fontSize: 15, fontWeight: '800', marginTop: 12, marginBottom: 4 },
   policyBody: { fontSize: 12, lineHeight: 18, marginBottom: 12 },
+
+  desktopRow: {
+    flexDirection: 'row',
+    gap: 20,
+    alignItems: 'flex-start',
+  },
+  desktopCol: {
+    flex: 1,
+  },
 });

@@ -16,6 +16,8 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
   const { colors } = useTheme();
   const isDesktop = width >= 768;
 
+  if (isDesktop) return null; // Navigation is handled by DesktopHeader on web/desktop
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background, borderTopColor: colors.cardBorder }]}>
       <View

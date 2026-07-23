@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import HomeScreen from '../screens/customer/HomeScreen';
 import SearchScreen from '../screens/customer/SearchScreen';
 import MyBookingsScreen from '../screens/customer/MyBookingsScreen';
@@ -13,14 +13,18 @@ import LiveTrackingScreen from '../screens/customer/LiveTrackingScreen';
 import HostDashboardScreen from '../screens/host/HostDashboardScreen';
 import DriverDashboardScreen from '../screens/driver/DriverDashboardScreen';
 import BottomTabBar from '../components/navigation/BottomTabBar';
+import DesktopHeader from '../components/navigation/DesktopHeader';
 import { useTheme } from '../context/ThemeContext';
 
 export default function BottomTabNavigator() {
+  const { width } = useWindowDimensions();
   const [activeTab, setActiveTab] = useState('Home');
   const [activeScreen, setActiveScreen] = useState('Main');
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [userRole, setUserRole] = useState('CUSTOMER'); // 'CUSTOMER', 'HOST', 'DRIVER'
   const { colors } = useTheme();
+  const isDesktop = width >= 768;
+
 
   // Navigation handlers
   const navigateTo = (screenName, params = {}) => {
@@ -119,6 +123,14 @@ export default function BottomTabNavigator() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {isDesktop && (
+        <DesktopHeader
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          userRole={userRole}
+          onRoleChange={handleRoleChange}
+        />
+      )}
       <View style={styles.content}>
         {renderScreen()}
       </View>

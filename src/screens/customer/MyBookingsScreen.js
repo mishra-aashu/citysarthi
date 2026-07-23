@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
@@ -46,8 +47,10 @@ const BOOKINGS = [
 ];
 
 export default function MyBookingsScreen({ onTrackBooking }) {
+  const { width } = useWindowDimensions();
   const [activeTab, setActiveTab] = useState('Active'); // 'Active' or 'Past'
   const { colors } = useTheme();
+  const isDesktop = width >= 768;
 
   const activeBookings = BOOKINGS.filter((b) => b.status === 'ONGOING' || b.status === 'UPCOMING');
   const pastBookings = BOOKINGS.filter((b) => b.status === 'COMPLETED' || b.status === 'CANCELLED');
@@ -63,7 +66,7 @@ export default function MyBookingsScreen({ onTrackBooking }) {
             Track active trips, history & download invoices
           </Text>
 
-          <View style={[styles.tabsContainer, { backgroundColor: colors.background }]}>
+          <View style={[styles.tabsContainer, { backgroundColor: colors.background, maxWidth: isDesktop ? 400 : '100%' }]}>
             <TouchableOpacity
               style={[
                 styles.tabBtn,
@@ -113,71 +116,77 @@ export default function MyBookingsScreen({ onTrackBooking }) {
               </Text>
             </View>
           ) : (
-            displayedBookings.map((b) => (
-              <View
-                key={b.id}
-                style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
-              >
-                <View style={styles.cardHeader}>
-                  <View>
-                    <Text style={[styles.bookingId, { color: colors.textPrimary }]}>ID: {b.id}</Text>
-                    <Text style={[styles.bookingType, { color: colors.textMuted }]}>{b.type}</Text>
+            <View style={isDesktop ? styles.desktopGrid : null}>
+              {displayedBookings.map((b) => (
+                <View
+                  key={b.id}
+                  style={[
+                    styles.card,
+                    { backgroundColor: colors.surface, borderColor: colors.cardBorder },
+                    isDesktop && styles.desktopCard,
+                  ]}
+                >
+                  <View style={styles.cardHeader}>
+                    <View>
+                      <Text style={[styles.bookingId, { color: colors.textPrimary }]}>ID: {b.id}</Text>
+                      <Text style={[styles.bookingType, { color: colors.textMuted }]}>{b.type}</Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.statusBadge,
+                        b.status === 'ONGOING' ? styles.statusOngoing : styles.statusCompleted,
+                      ]}
+                    >
+                      <Text style={[styles.statusText, { color: b.status === 'ONGOING' ? colors.success : colors.textMuted }]}>
+                        {b.status}
+                      </Text>
+                    </View>
                   </View>
-                  <View
-                    style={[
-                      styles.statusBadge,
-                      b.status === 'ONGOING' ? styles.statusOngoing : styles.statusCompleted,
-                    ]}
-                  >
-                    <Text style={[styles.statusText, { color: b.status === 'ONGOING' ? colors.success : colors.textMuted }]}>
-                      {b.status}
+
+                  <View style={[styles.divider, { backgroundColor: colors.subtleBorder }]} />
+
+                  <Text style={[styles.vehicleName, { color: colors.textPrimary }]}>{b.vehicleName}</Text>
+
+                  <View style={styles.infoRow}>
+                    <Ionicons name="calendar-outline" size={14} color={colors.textMuted} />
+                    <Text style={[styles.infoText, { color: colors.textSecondary }]}>
+                      {b.startDate} → {b.endDate}
                     </Text>
                   </View>
-                </View>
 
-                <View style={[styles.divider, { backgroundColor: colors.subtleBorder }]} />
-
-                <Text style={[styles.vehicleName, { color: colors.textPrimary }]}>{b.vehicleName}</Text>
-
-                <View style={styles.infoRow}>
-                  <Ionicons name="calendar-outline" size={14} color={colors.textMuted} />
-                  <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-                    {b.startDate} → {b.endDate}
-                  </Text>
-                </View>
-
-                <View style={styles.infoRow}>
-                  <Ionicons name="location-outline" size={14} color={colors.textMuted} />
-                  <Text style={[styles.infoText, { color: colors.textSecondary }]}>{b.pickup}</Text>
-                </View>
-
-                {b.otp && (
-                  <View style={[styles.otpBox, { backgroundColor: colors.background }]}>
-                    <Text style={[styles.otpLabel, { color: colors.textMuted }]}>Start Trip OTP / PIN:</Text>
-                    <Text style={[styles.otpValue, { color: colors.accent }]}>{b.otp}</Text>
+                  <View style={styles.infoRow}>
+                    <Ionicons name="location-outline" size={14} color={colors.textMuted} />
+                    <Text style={[styles.infoText, { color: colors.textSecondary }]}>{b.pickup}</Text>
                   </View>
-                )}
 
-                <View style={[styles.cardFooter, { borderTopColor: colors.subtleBorder }]}>
-                  <Text style={[styles.amountText, { color: colors.primaryLight }]}>{b.amount}</Text>
-
-                  {b.status === 'ONGOING' ? (
-                    <TouchableOpacity
-                      style={[styles.trackBtn, { backgroundColor: colors.primary }]}
-                      onPress={() => onTrackBooking && onTrackBooking({ name: b.vehicleName })}
-                    >
-                      <Ionicons name="navigate" size={14} color="#FFFFFF" />
-                      <Text style={styles.trackBtnText}>Live Track</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity style={[styles.invoiceBtn, { backgroundColor: colors.background }]}>
-                      <Ionicons name="document-text-outline" size={14} color={colors.primaryLight} />
-                      <Text style={[styles.invoiceBtnText, { color: colors.primaryLight }]}>Invoice</Text>
-                    </TouchableOpacity>
+                  {b.otp && (
+                    <View style={[styles.otpBox, { backgroundColor: colors.background }]}>
+                      <Text style={[styles.otpLabel, { color: colors.textMuted }]}>Start Trip OTP / PIN:</Text>
+                      <Text style={[styles.otpValue, { color: colors.accent }]}>{b.otp}</Text>
+                    </View>
                   )}
+
+                  <View style={[styles.cardFooter, { borderTopColor: colors.subtleBorder }]}>
+                    <Text style={[styles.amountText, { color: colors.primaryLight }]}>{b.amount}</Text>
+
+                    {b.status === 'ONGOING' ? (
+                      <TouchableOpacity
+                        style={[styles.trackBtn, { backgroundColor: colors.primary }]}
+                        onPress={() => onTrackBooking && onTrackBooking({ name: b.vehicleName })}
+                      >
+                        <Ionicons name="navigate" size={14} color="#000000" />
+                        <Text style={styles.trackBtnText}>Live Track</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity style={[styles.invoiceBtn, { backgroundColor: colors.background }]}>
+                        <Ionicons name="document-text-outline" size={14} color={colors.primaryLight} />
+                        <Text style={[styles.invoiceBtnText, { color: colors.primaryLight }]}>Invoice</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
-              </View>
-            ))
+              ))}
+            </View>
           )}
         </ScrollView>
       </SafeAreaView>
@@ -225,4 +234,15 @@ const styles = StyleSheet.create({
   emptyState: { alignItems: 'center', justifyContent: 'center', paddingVertical: 40 },
   emptyTitle: { fontSize: 16, fontWeight: '700', marginTop: 12 },
   emptyDesc: { fontSize: 12, marginTop: 4, textAlign: 'center' },
+  desktopGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  desktopCard: {
+    flexBasis: '48%',
+    flexGrow: 1,
+    minWidth: 320,
+    marginBottom: 16,
+  },
 });

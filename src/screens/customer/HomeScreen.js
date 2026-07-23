@@ -74,32 +74,34 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           {/* Top Header */}
           <View style={styles.header}>
-            <View style={styles.logoRow}>
-              <View style={styles.brandContainer}>
-                <Ionicons name="car-sport" size={26} color={colors.primaryLight} />
-                <Text style={[styles.brandTitle, { color: colors.textPrimary }]}>
-                  City<Text style={{ color: colors.primaryLight }}>Sarthi</Text>
-                </Text>
-              </View>
+            {!isDesktop && (
+              <View style={styles.logoRow}>
+                <View style={styles.brandContainer}>
+                  <Ionicons name="car-sport" size={26} color={colors.primaryLight} />
+                  <Text style={[styles.brandTitle, { color: colors.textPrimary }]}>
+                    City<Text style={{ color: colors.primaryLight }}>Sarthi</Text>
+                  </Text>
+                </View>
 
-              <View style={styles.headerActions}>
-                <TouchableOpacity style={styles.walletPill}>
-                  <Ionicons name="wallet-outline" size={16} color={colors.accent} />
-                  <Text style={[styles.walletText, { color: colors.accent }]}>₹1,450</Text>
-                </TouchableOpacity>
+                <View style={styles.headerActions}>
+                  <TouchableOpacity style={styles.walletPill}>
+                    <Ionicons name="wallet-outline" size={16} color={colors.accent} />
+                    <Text style={[styles.walletText, { color: colors.accent }]}>₹1,450</Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.iconBtn, { backgroundColor: colors.surface }]}>
-                  <Ionicons name="notifications-outline" size={20} color={colors.textPrimary} />
-                  <View style={[styles.notifBadge, { backgroundColor: colors.danger }]} />
-                </TouchableOpacity>
+                  <TouchableOpacity style={[styles.iconBtn, { backgroundColor: colors.surface }]}>
+                    <Ionicons name="notifications-outline" size={20} color={colors.textPrimary} />
+                    <View style={[styles.notifBadge, { backgroundColor: colors.danger }]} />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
+            )}
 
             {/* Location Bar */}
-            <TouchableOpacity style={[styles.locationBar, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+            <TouchableOpacity style={[styles.locationBar, { backgroundColor: colors.surface, borderColor: colors.cardBorder }, isDesktop && { marginTop: 0 }]}>
               <Ionicons name="location" size={18} color={colors.primaryLight} />
               <View style={styles.locationTextContainer}>
-                <Text style={[styles.locationLabel, { color: colors.textMuted }]}>YOUR LOCATION</Text>
+                <Text style={[styles.locationLabel, { color: colors.textMuted }]}>PICKUP LOCATION & CITY</Text>
                 <Text style={[styles.locationValue, { color: colors.textPrimary }]} numberOfLines={1}>
                   {pickupLoc}
                 </Text>
@@ -108,88 +110,139 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
             </TouchableOpacity>
           </View>
 
-          {/* Trip Type Segment Control */}
-          <View style={[styles.tripTypeContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder, borderWidth: 1 }]}>
-            <TouchableOpacity
-              style={[styles.tripTypeTab, tripType === 'self_drive' && { backgroundColor: colors.primary }]}
-              onPress={() => setTripType('self_drive')}
-            >
-              <MaterialCommunityIcons
-                name="car-key"
-                size={18}
-                color={tripType === 'self_drive' ? '#000000' : colors.textPrimary}
-              />
-              <Text
-                style={[
-                  styles.tripTabText,
-                  { color: tripType === 'self_drive' ? '#000000' : colors.textPrimary, fontWeight: '800' },
-                ]}
-              >
-                Self-Drive Rental
-              </Text>
-            </TouchableOpacity>
+          {/* Desktop Hero Section */}
+          <View style={isDesktop ? styles.desktopHeroRow : null}>
+            <View style={isDesktop ? styles.desktopHeroLeft : null}>
+              {/* Trip Type Segment Control */}
+              <View style={[styles.tripTypeContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder, borderWidth: 1 }]}>
+                <TouchableOpacity
+                  style={[styles.tripTypeTab, tripType === 'self_drive' && { backgroundColor: colors.primary }]}
+                  onPress={() => setTripType('self_drive')}
+                >
+                  <MaterialCommunityIcons
+                    name="car-key"
+                    size={18}
+                    color={tripType === 'self_drive' ? '#000000' : colors.textPrimary}
+                  />
+                  <Text
+                    style={[
+                      styles.tripTabText,
+                      { color: tripType === 'self_drive' ? '#000000' : colors.textPrimary, fontWeight: '800' },
+                    ]}
+                  >
+                    Self-Drive Rental
+                  </Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.tripTypeTab, tripType === 'ride' && { backgroundColor: colors.primary }]}
-              onPress={() => setTripType('ride')}
-            >
-              <Ionicons
-                name="car"
-                size={18}
-                color={tripType === 'ride' ? '#000000' : colors.textPrimary}
-              />
-              <Text
-                style={[
-                  styles.tripTabText,
-                  { color: tripType === 'ride' ? '#000000' : colors.textPrimary, fontWeight: '800' },
-                ]}
-              >
-                Ride / Taxi
-              </Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  style={[styles.tripTypeTab, tripType === 'ride' && { backgroundColor: colors.primary }]}
+                  onPress={() => setTripType('ride')}
+                >
+                  <Ionicons
+                    name="car"
+                    size={18}
+                    color={tripType === 'ride' ? '#000000' : colors.textPrimary}
+                  />
+                  <Text
+                    style={[
+                      styles.tripTabText,
+                      { color: tripType === 'ride' ? '#000000' : colors.textPrimary, fontWeight: '800' },
+                    ]}
+                  >
+                    Ride / Taxi
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-          {/* Search / Booking Box */}
-          <View style={[styles.searchCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-            <Text style={[styles.searchCardTitle, { color: colors.textPrimary }]}>
-              {tripType === 'self_drive' ? 'Rent a Vehicle Anywhere, Anytime' : 'Book an Instant Ride'}
-            </Text>
+              {/* Search / Booking Box */}
+              <View style={[styles.searchCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+                <Text style={[styles.searchCardTitle, { color: colors.textPrimary }]}>
+                  {tripType === 'self_drive' ? 'Rent a Vehicle Anywhere, Anytime' : 'Book an Instant Ride'}
+                </Text>
 
-            <View style={[styles.inputGroup, { backgroundColor: colors.background, borderColor: colors.cardBorder }]}>
-              <Ionicons name="ellipse" size={10} color={colors.success} style={styles.inputDot} />
-              <TextInput
-                style={[styles.input, { color: colors.textPrimary }]}
-                value={pickupLoc}
-                onChangeText={setPickupLoc}
-                placeholder="Pickup Address / City"
-                placeholderTextColor={colors.textMuted}
-                underlineColorAndroid="transparent"
-              />
+                <View style={[styles.inputGroup, { backgroundColor: colors.background, borderColor: colors.cardBorder }]}>
+                  <Ionicons name="ellipse" size={10} color={colors.success} style={styles.inputDot} />
+                  <TextInput
+                    style={[styles.input, { color: colors.textPrimary }]}
+                    value={pickupLoc}
+                    onChangeText={setPickupLoc}
+                    placeholder="Pickup Address / City"
+                    placeholderTextColor={colors.textMuted}
+                    underlineColorAndroid="transparent"
+                  />
+                </View>
+
+                {tripType === 'ride' && (
+                  <View style={[styles.inputGroup, { marginTop: 10, backgroundColor: colors.background, borderColor: colors.cardBorder }]}>
+                    <Ionicons name="location" size={12} color={colors.danger} style={styles.inputDot} />
+                    <TextInput
+                      style={[styles.input, { color: colors.textPrimary }]}
+                      value={dropLoc}
+                      onChangeText={setDropLoc}
+                      placeholder="Where to? (Destination)"
+                      placeholderTextColor={colors.textMuted}
+                      underlineColorAndroid="transparent"
+                    />
+                  </View>
+                )}
+
+                <TouchableOpacity
+                  style={[styles.searchBtn, { backgroundColor: colors.primary }]}
+                  onPress={() => onNavigateToTab && onNavigateToTab('Search')}
+                >
+                  <Ionicons name="search" size={18} color="#000000" />
+                  <Text style={styles.searchBtnText}>
+                    {tripType === 'self_drive' ? 'Find Available Vehicles' : 'Search Rides & Fares'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
-            {tripType === 'ride' && (
-              <View style={[styles.inputGroup, { marginTop: 10, backgroundColor: colors.background, borderColor: colors.cardBorder }]}>
-                <Ionicons name="location" size={12} color={colors.danger} style={styles.inputDot} />
-                <TextInput
-                  style={[styles.input, { color: colors.textPrimary }]}
-                  value={dropLoc}
-                  onChangeText={setDropLoc}
-                  placeholder="Where to? (Destination)"
-                  placeholderTextColor={colors.textMuted}
-                  underlineColorAndroid="transparent"
-                />
-              </View>
-            )}
-
-            <TouchableOpacity
-              style={[styles.searchBtn, { backgroundColor: colors.primary }]}
-              onPress={() => onNavigateToTab && onNavigateToTab('Search')}
+            {/* Promo Banner Card */}
+            <View
+              style={[
+                styles.promoCard,
+                {
+                  backgroundColor: colors.promoBg,
+                  borderColor: colors.promoBorder,
+                },
+                isDesktop && styles.desktopPromoCard,
+              ]}
             >
-              <Ionicons name="search" size={18} color="#000000" />
-              <Text style={styles.searchBtnText}>
-                {tripType === 'self_drive' ? 'Find Available Vehicles' : 'Search Rides & Fares'}
-              </Text>
-            </TouchableOpacity>
+              <View style={styles.promoContent}>
+                <View style={styles.promoTag}>
+                  <Text style={styles.promoTagText}>MONSOON OFFER</Text>
+                </View>
+                <Text style={[styles.promoTitle, { color: colors.promoTitle }]}>
+                  Flat 20% OFF on First Self-Drive
+                </Text>
+                <Text style={[styles.promoDesc, { color: colors.promoDesc }]}>
+                  Use Code: <Text style={{ color: colors.accent, fontWeight: '800' }}>CITYSARTHI20</Text>
+                </Text>
+                {isDesktop && (
+                  <View style={styles.desktopPromoFeatures}>
+                    <View style={styles.promoFeatureRow}>
+                      <Ionicons name="checkmark-circle" size={16} color={colors.accent} />
+                      <Text style={[styles.promoFeatureText, { color: colors.promoTitle }]}>Zero Security Deposit Option</Text>
+                    </View>
+                    <View style={styles.promoFeatureRow}>
+                      <Ionicons name="checkmark-circle" size={16} color={colors.accent} />
+                      <Text style={[styles.promoFeatureText, { color: colors.promoTitle }]}>Free Doorstep Delivery & Pickup</Text>
+                    </View>
+                    <View style={styles.promoFeatureRow}>
+                      <Ionicons name="checkmark-circle" size={16} color={colors.accent} />
+                      <Text style={[styles.promoFeatureText, { color: colors.promoTitle }]}>24/7 Roadside Assistance Included</Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+              <Ionicons
+                name="gift-outline"
+                size={70}
+                color={isDark ? 'rgba(255,255,255,0.18)' : 'rgba(243, 163, 20, 0.18)'}
+                style={styles.promoBgIcon}
+              />
+            </View>
           </View>
 
           {/* Categories Grid */}
@@ -200,60 +253,58 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
             </TouchableOpacity>
           </View>
 
-          <ScrollView
-            ref={categoriesScrollRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.categoriesScroll}
-          >
-            {CATEGORIES.map((cat) => (
-              <TouchableOpacity
-                key={cat.id}
-                style={[styles.catCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
-                onPress={() => onNavigateToTab && onNavigateToTab('Search')}
-              >
-                {cat.badge && (
-                  <View style={[styles.catBadge, { backgroundColor: colors.accent }]}>
-                    <Text style={styles.catBadgeText}>{cat.badge}</Text>
+          {isDesktop ? (
+            <View style={styles.desktopCategoriesGrid}>
+              {CATEGORIES.map((cat) => (
+                <TouchableOpacity
+                  key={cat.id}
+                  style={[
+                    styles.catCard,
+                    styles.desktopCatCard,
+                    { backgroundColor: colors.surface, borderColor: colors.cardBorder },
+                  ]}
+                  onPress={() => onNavigateToTab && onNavigateToTab('Search')}
+                >
+                  {cat.badge && (
+                    <View style={[styles.catBadge, { backgroundColor: colors.accent }]}>
+                      <Text style={styles.catBadgeText}>{cat.badge}</Text>
+                    </View>
+                  )}
+                  <View style={styles.catIconCircle}>
+                    <MaterialCommunityIcons name={cat.icon} size={28} color={colors.primaryLight} />
                   </View>
-                )}
-                <View style={styles.catIconCircle}>
-                  <MaterialCommunityIcons name={cat.icon} size={28} color={colors.primaryLight} />
-                </View>
-                <Text style={[styles.catName, { color: colors.textPrimary }]}>{cat.name}</Text>
-                <Text style={[styles.catPrice, { color: colors.textMuted }]}>{cat.price}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-
-          {/* Promo Banner Card */}
-          <View
-            style={[
-              styles.promoCard,
-              {
-                backgroundColor: colors.promoBg,
-                borderColor: colors.promoBorder,
-              },
-            ]}
-          >
-            <View style={styles.promoContent}>
-              <View style={styles.promoTag}>
-                <Text style={styles.promoTagText}>MONSOON OFFER</Text>
-              </View>
-              <Text style={[styles.promoTitle, { color: colors.promoTitle }]}>
-                Flat 20% OFF on First Self-Drive
-              </Text>
-              <Text style={[styles.promoDesc, { color: colors.promoDesc }]}>
-                Use Code: <Text style={{ color: colors.accent, fontWeight: '800' }}>CITYSARTHI20</Text>
-              </Text>
+                  <Text style={[styles.catName, { color: colors.textPrimary }]}>{cat.name}</Text>
+                  <Text style={[styles.catPrice, { color: colors.textMuted }]}>{cat.price}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
-            <Ionicons
-              name="gift-outline"
-              size={54}
-              color={isDark ? 'rgba(255,255,255,0.2)' : 'rgba(243, 163, 20, 0.18)'}
-              style={styles.promoBgIcon}
-            />
-          </View>
+          ) : (
+            <ScrollView
+              ref={categoriesScrollRef}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.categoriesScroll}
+            >
+              {CATEGORIES.map((cat) => (
+                <TouchableOpacity
+                  key={cat.id}
+                  style={[styles.catCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+                  onPress={() => onNavigateToTab && onNavigateToTab('Search')}
+                >
+                  {cat.badge && (
+                    <View style={[styles.catBadge, { backgroundColor: colors.accent }]}>
+                      <Text style={styles.catBadgeText}>{cat.badge}</Text>
+                    </View>
+                  )}
+                  <View style={styles.catIconCircle}>
+                    <MaterialCommunityIcons name={cat.icon} size={28} color={colors.primaryLight} />
+                  </View>
+                  <Text style={[styles.catName, { color: colors.textPrimary }]}>{cat.name}</Text>
+                  <Text style={[styles.catPrice, { color: colors.textMuted }]}>{cat.price}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
 
           {/* Nearby Available Vehicles */}
           <View style={styles.sectionHeader}>
@@ -514,9 +565,49 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
-    justifyContent: 'space-between',
   },
   desktopVehicleCard: {
-    width: '48.5%',
+    flexBasis: '31%',
+    flexGrow: 1,
+    minWidth: 320,
+  },
+  desktopHeroRow: {
+    flexDirection: 'row',
+    gap: 20,
+    marginBottom: 24,
+    alignItems: 'stretch',
+  },
+  desktopHeroLeft: {
+    flex: 1.2,
+  },
+  desktopPromoCard: {
+    flex: 0.8,
+    marginBottom: 0,
+    justifyContent: 'center',
+    padding: 24,
+  },
+  desktopPromoFeatures: {
+    marginTop: 16,
+    gap: 8,
+  },
+  promoFeatureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  promoFeatureText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  desktopCategoriesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 14,
+    marginBottom: 28,
+  },
+  desktopCatCard: {
+    width: '23%',
+    flexGrow: 1,
+    marginRight: 0,
   },
 });

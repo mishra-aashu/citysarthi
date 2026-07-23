@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  useWindowDimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
@@ -66,14 +67,42 @@ const ALL_VEHICLES = [
     image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80',
     category: 'Auto',
   },
+  {
+    id: 's5',
+    name: 'Hyundai Creta',
+    type: 'SUV',
+    transmission: 'Manual',
+    fuel: 'Petrol',
+    seats: 5,
+    rating: 4.85,
+    price: 119,
+    location: 'Gurugram Cyber City',
+    image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80',
+    category: 'SUV',
+  },
+  {
+    id: 's6',
+    name: 'Royal Enfield Classic 350',
+    type: 'Bike',
+    transmission: 'Manual',
+    fuel: 'Petrol',
+    seats: 2,
+    rating: 4.75,
+    price: 49,
+    location: 'South Extension, Delhi',
+    image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80',
+    category: 'Bike',
+  },
 ];
 
 const FILTERS = ['All', 'SUV', 'Sedan', 'Hatchback', 'Electric', 'Auto', 'Bike'];
 
 export default function SearchScreen({ onSelectVehicle }) {
+  const { width } = useWindowDimensions();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
   const { colors } = useTheme();
+  const isDesktop = width >= 768;
 
   const filteredVehicles = ALL_VEHICLES.filter((v) => {
     const matchesFilter = activeFilter === 'All' || v.category === activeFilter || v.type.includes(activeFilter);
@@ -91,7 +120,7 @@ export default function SearchScreen({ onSelectVehicle }) {
           </Text>
 
           {/* Search Bar Input */}
-          <View style={[styles.searchBarContainer, { backgroundColor: colors.background, borderColor: colors.surfaceLight }]}>
+          <View style={[styles.searchBarContainer, { backgroundColor: colors.background, borderColor: colors.cardBorder }]}>
             <Ionicons name="search" size={20} color={colors.textMuted} />
             <TextInput
               style={[styles.searchInput, { color: colors.textPrimary }]}
@@ -114,7 +143,7 @@ export default function SearchScreen({ onSelectVehicle }) {
                 key={f}
                 style={[
                   styles.filterChip,
-                  { backgroundColor: colors.background, borderColor: colors.surfaceLight },
+                  { backgroundColor: colors.background, borderColor: colors.cardBorder },
                   activeFilter === f && { backgroundColor: colors.primary, borderColor: colors.primary },
                 ]}
                 onPress={() => setActiveFilter(f)}
@@ -123,7 +152,7 @@ export default function SearchScreen({ onSelectVehicle }) {
                   style={[
                     styles.filterText,
                     { color: colors.textMuted },
-                    activeFilter === f && { color: colors.white, fontWeight: '700' },
+                    activeFilter === f && { color: '#000000', fontWeight: '800' },
                   ]}
                 >
                   {f}
@@ -138,55 +167,61 @@ export default function SearchScreen({ onSelectVehicle }) {
             Showing {filteredVehicles.length} vehicles
           </Text>
 
-          {filteredVehicles.map((v) => (
-            <TouchableOpacity
-              key={v.id}
-              style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
-              onPress={() => onSelectVehicle && onSelectVehicle(v)}
-              activeOpacity={0.85}
-            >
-              <View style={{ width: 120 }}>
-                <VehicleImageCard imageUri={v.image} type={v.type} height={120} />
-              </View>
-              <View style={styles.cardInfo}>
-                <View style={styles.titleRow}>
-                  <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>{v.name}</Text>
-                  <View style={styles.ratingBadge}>
-                    <Ionicons name="star" size={12} color={colors.accent} />
-                    <Text style={[styles.ratingText, { color: colors.accent }]}>{v.rating}</Text>
+          <View style={isDesktop ? styles.desktopGrid : null}>
+            {filteredVehicles.map((v) => (
+              <TouchableOpacity
+                key={v.id}
+                style={[
+                  styles.card,
+                  { backgroundColor: colors.surface, borderColor: colors.cardBorder },
+                  isDesktop && styles.desktopCard,
+                ]}
+                onPress={() => onSelectVehicle && onSelectVehicle(v)}
+                activeOpacity={0.85}
+              >
+                <View style={isDesktop ? { width: '100%', height: 160 } : { width: 120 }}>
+                  <VehicleImageCard imageUri={v.image} type={v.type} height={isDesktop ? 160 : 120} />
+                </View>
+                <View style={styles.cardInfo}>
+                  <View style={styles.titleRow}>
+                    <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>{v.name}</Text>
+                    <View style={styles.ratingBadge}>
+                      <Ionicons name="star" size={12} color={colors.accent} />
+                      <Text style={[styles.ratingText, { color: colors.accent }]}>{v.rating}</Text>
+                    </View>
+                  </View>
+
+                  <Text style={[styles.cardLoc, { color: colors.textMuted }]}>
+                    <Ionicons name="location" size={12} color={colors.primaryLight} /> {v.location}
+                  </Text>
+
+                  <View style={styles.tagRow}>
+                    <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
+                      {v.type}
+                    </Text>
+                    <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
+                      {v.fuel}
+                    </Text>
+                    <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
+                      {v.transmission}
+                    </Text>
+                  </View>
+
+                  <View style={styles.cardFooter}>
+                    <Text style={[styles.cardPrice, { color: colors.primaryLight }]}>
+                      ₹{v.price}<Text style={[styles.unitText, { color: colors.textMuted }]}>/hr</Text>
+                    </Text>
+                    <TouchableOpacity
+                      style={[styles.selectBtn, { backgroundColor: colors.primary }]}
+                      onPress={() => onSelectVehicle && onSelectVehicle(v)}
+                    >
+                      <Text style={styles.selectBtnText}>Select</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
-
-                <Text style={[styles.cardLoc, { color: colors.textMuted }]}>
-                  <Ionicons name="location" size={12} color={colors.primaryLight} /> {v.location}
-                </Text>
-
-                <View style={styles.tagRow}>
-                  <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
-                    {v.type}
-                  </Text>
-                  <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
-                    {v.fuel}
-                  </Text>
-                  <Text style={[styles.tag, { color: colors.textSecondary, backgroundColor: colors.background }]}>
-                    {v.transmission}
-                  </Text>
-                </View>
-
-                <View style={styles.cardFooter}>
-                  <Text style={[styles.cardPrice, { color: colors.primaryLight }]}>
-                    ₹{v.price}<Text style={[styles.unitText, { color: colors.textMuted }]}>/hr</Text>
-                  </Text>
-                  <TouchableOpacity
-                    style={[styles.selectBtn, { backgroundColor: colors.primary }]}
-                    onPress={() => onSelectVehicle && onSelectVehicle(v)}
-                  >
-                    <Text style={styles.selectBtnText}>Select</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            ))}
+          </View>
         </ScrollView>
       </SafeAreaView>
     </ResponsiveContainer>
@@ -241,4 +276,16 @@ const styles = StyleSheet.create({
   unitText: { fontSize: 11 },
   selectBtn: { paddingHorizontal: 16, paddingVertical: 7, borderRadius: 20 },
   selectBtnText: { color: '#000000', fontSize: 12, fontWeight: '800' },
+  desktopGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  desktopCard: {
+    flexDirection: 'column',
+    flexBasis: '31%',
+    flexGrow: 1,
+    minWidth: 300,
+    marginBottom: 16,
+  },
 });
