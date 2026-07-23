@@ -8,41 +8,44 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 export default function BookingConfirmationScreen({ vehicle, onViewLiveTracking, onGoHome }) {
   const vName = vehicle?.name || 'Hyundai Creta 2023';
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.iconCircle}>
-          <Ionicons name="checkmark-circle" size={72} color={COLORS.success} />
-        </View>
-
-        <Text style={styles.title}>Booking Confirmed!</Text>
-        <Text style={styles.subtitle}>Your vehicle is reserved & ready for pickup</Text>
-
-        <View style={styles.card}>
-          <Text style={styles.bookingId}>Booking ID: CS-88392</Text>
-          <Text style={styles.vehicleTitle}>{vName}</Text>
-          
-          <View style={styles.otpBox}>
-            <Text style={styles.otpLabel}>START TRIP OTP PIN:</Text>
-            <Text style={styles.otpValue}>4921</Text>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.iconCircle}>
+            <Ionicons name="checkmark-circle" size={72} color={COLORS.success} />
           </View>
-          <Text style={styles.otpNotice}>Show this OTP to hub manager or enter in app to unlock car.</Text>
+
+          <Text style={styles.title}>Booking Confirmed!</Text>
+          <Text style={styles.subtitle}>Your vehicle is reserved & ready for pickup</Text>
+
+          <View style={styles.card}>
+            <Text style={styles.bookingId}>Booking ID: CS-88392</Text>
+            <Text style={styles.vehicleTitle}>{vName}</Text>
+            
+            <View style={styles.otpBox}>
+              <Text style={styles.otpLabel}>START TRIP OTP PIN:</Text>
+              <Text style={styles.otpValue}>4921</Text>
+            </View>
+            <Text style={styles.otpNotice}>Show this OTP to hub manager or enter in app to unlock car.</Text>
+          </View>
+
+          <TouchableOpacity style={styles.trackBtn} onPress={onViewLiveTracking}>
+            <Ionicons name="navigate" size={18} color={COLORS.white} />
+            <Text style={styles.trackBtnText}>Track Vehicle / Start Trip</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.homeBtn} onPress={onGoHome}>
+            <Text style={styles.homeBtnText}>Back to Home</Text>
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity style={styles.trackBtn} onPress={onViewLiveTracking}>
-          <Ionicons name="navigate" size={18} color={COLORS.white} />
-          <Text style={styles.trackBtnText}>Track Vehicle / Start Trip</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.homeBtn} onPress={onGoHome}>
-          <Text style={styles.homeBtnText}>Back to Home</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

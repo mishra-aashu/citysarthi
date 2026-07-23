@@ -8,61 +8,64 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 export default function LiveTrackingScreen({ vehicle, onBack }) {
   const vName = vehicle?.name || 'Hyundai Creta 2023';
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topHeader}>
-        <TouchableOpacity style={styles.backBtn} onPress={onBack}>
-          <Ionicons name="arrow-back" size={20} color={COLORS.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.topHeaderTitle}>Live Map Tracking</Text>
-        <View style={{ width: 36 }} />
-      </View>
-
-      {/* Simulated Live Map Area */}
-      <View style={styles.mapContainer}>
-        <View style={styles.mapGraphic}>
-          <Ionicons name="location" size={48} color={COLORS.primaryLight} />
-          <Text style={styles.mapPinLabel}>Sector 62 Hub, Noida</Text>
-          <View style={styles.radarPulse} />
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.topHeader}>
+          <TouchableOpacity style={styles.backBtn} onPress={onBack}>
+            <Ionicons name="arrow-back" size={20} color={COLORS.textPrimary} />
+          </TouchableOpacity>
+          <Text style={styles.topHeaderTitle}>Live Map Tracking</Text>
+          <View style={{ width: 36 }} />
         </View>
 
-        {/* Live Trip Status Drawer */}
-        <View style={styles.tripDrawer}>
-          <View style={styles.drawerHeader}>
-            <View>
-              <Text style={styles.vehicleTitle}>{vName}</Text>
-              <Text style={styles.statusText}>Trip Status: <Text style={{ color: COLORS.success }}>Active (Check-In Complete)</Text></Text>
-            </View>
-            <View style={styles.etaPill}>
-              <Text style={styles.etaTitle}>ETA 12 Min</Text>
-            </View>
+        {/* Simulated Live Map Area */}
+        <View style={styles.mapContainer}>
+          <View style={styles.mapGraphic}>
+            <Ionicons name="location" size={48} color={COLORS.primaryLight} />
+            <Text style={styles.mapPinLabel}>Sector 62 Hub, Noida</Text>
+            <View style={styles.radarPulse} />
           </View>
 
-          <View style={styles.divider} />
+          {/* Live Trip Status Drawer */}
+          <View style={styles.tripDrawer}>
+            <View style={styles.drawerHeader}>
+              <View>
+                <Text style={styles.vehicleTitle}>{vName}</Text>
+                <Text style={styles.statusText}>Trip Status: <Text style={{ color: COLORS.success }}>Active (Check-In Complete)</Text></Text>
+              </View>
+              <View style={styles.etaPill}>
+                <Text style={styles.etaTitle}>ETA 12 Min</Text>
+              </View>
+            </View>
 
-          <View style={styles.actionsRow}>
-            <TouchableOpacity style={styles.actionBtn}>
-              <Ionicons name="call" size={18} color={COLORS.primaryLight} />
-              <Text style={styles.actionBtnText}>Call Hub</Text>
-            </TouchableOpacity>
+            <View style={styles.divider} />
 
-            <TouchableOpacity style={styles.actionBtn}>
-              <Ionicons name="chatbubbles" size={18} color={COLORS.primaryLight} />
-              <Text style={styles.actionBtnText}>Chat</Text>
-            </TouchableOpacity>
+            <View style={styles.actionsRow}>
+              <TouchableOpacity style={styles.actionBtn}>
+                <Ionicons name="call" size={18} color={COLORS.primaryLight} />
+                <Text style={styles.actionBtnText}>Call Hub</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.actionBtn, { backgroundColor: 'rgba(239, 68, 68, 0.15)' }]}>
-              <Ionicons name="warning" size={18} color={COLORS.danger} />
-              <Text style={[styles.actionBtnText, { color: COLORS.danger }]}>SOS Help</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.actionBtn}>
+                <Ionicons name="chatbubbles" size={18} color={COLORS.primaryLight} />
+                <Text style={styles.actionBtnText}>Chat</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[styles.actionBtn, { backgroundColor: 'rgba(239, 68, 68, 0.15)' }]}>
+                <Ionicons name="warning" size={18} color={COLORS.danger} />
+                <Text style={[styles.actionBtnText, { color: COLORS.danger }]}>SOS Help</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

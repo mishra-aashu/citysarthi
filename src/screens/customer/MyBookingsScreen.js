@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 const BOOKINGS = [
   {
@@ -53,7 +54,8 @@ export default function MyBookingsScreen({ onTrackBooking }) {
   const displayedBookings = activeTab === 'Active' ? activeBookings : pastBookings;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>My Bookings</Text>
         <Text style={styles.subtitle}>Track active trips, history & download invoices</Text>
@@ -149,6 +151,7 @@ export default function MyBookingsScreen({ onTrackBooking }) {
         )}
       </ScrollView>
     </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 const FAQS = [
   { q: 'How do I start a self-drive rental trip?', a: 'Once at the car location, open My Bookings, tap Check-In, verify photos, enter your 4-digit OTP, and unlock the vehicle.' },
@@ -18,58 +19,60 @@ const FAQS = [
 
 export default function SupportScreen() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Help & Support</Text>
-        <Text style={styles.subtitle}>24x7 Customer Assistance & Emergency SOS</Text>
-      </View>
-
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Emergency SOS Banner */}
-        <View style={styles.sosCard}>
-          <View style={styles.sosHeader}>
-            <Ionicons name="warning" size={24} color={COLORS.white} />
-            <Text style={styles.sosTitle}>24x7 Roadside Emergency SOS</Text>
-          </View>
-          <Text style={styles.sosDesc}>
-            In case of accident, breakdown, or safety concern during your trip.
-          </Text>
-          <TouchableOpacity style={styles.sosBtn}>
-            <Ionicons name="call" size={16} color={COLORS.danger} />
-            <Text style={styles.sosBtnText}>CALL EMERGENCY HELPLINE (1800-SARTHI)</Text>
-          </TouchableOpacity>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Help & Support</Text>
+          <Text style={styles.subtitle}>24x7 Customer Assistance & Emergency SOS</Text>
         </View>
 
-        {/* Quick Options */}
-        <Text style={styles.sectionTitle}>Quick Support</Text>
-        <View style={styles.grid}>
-          <TouchableOpacity style={styles.gridCard}>
-            <View style={[styles.gridIcon, { backgroundColor: 'rgba(37, 99, 235, 0.15)' }]}>
-              <Ionicons name="chatbubbles" size={22} color={COLORS.primaryLight} />
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          {/* Emergency SOS Banner */}
+          <View style={styles.sosCard}>
+            <View style={styles.sosHeader}>
+              <Ionicons name="warning" size={24} color={COLORS.white} />
+              <Text style={styles.sosTitle}>24x7 Roadside Emergency SOS</Text>
             </View>
-            <Text style={styles.gridTitle}>Live Chat</Text>
-            <Text style={styles.gridDesc}>Chat with AI & Agents</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gridCard}>
-            <View style={[styles.gridIcon, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
-              <Ionicons name="call" size={22} color={COLORS.success} />
-            </View>
-            <Text style={styles.gridTitle}>Call Support</Text>
-            <Text style={styles.gridDesc}>Speak to Executive</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* FAQs Section */}
-        <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
-        {FAQS.map((item, idx) => (
-          <View key={idx} style={styles.faqCard}>
-            <Text style={styles.faqQ}>Q: {item.q}</Text>
-            <Text style={styles.faqA}>{item.a}</Text>
+            <Text style={styles.sosDesc}>
+              In case of accident, breakdown, or safety concern during your trip.
+            </Text>
+            <TouchableOpacity style={styles.sosBtn}>
+              <Ionicons name="call" size={16} color={COLORS.danger} />
+              <Text style={styles.sosBtnText}>CALL EMERGENCY HELPLINE (1800-SARTHI)</Text>
+            </TouchableOpacity>
           </View>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+
+          {/* Quick Options */}
+          <Text style={styles.sectionTitle}>Quick Support</Text>
+          <View style={styles.grid}>
+            <TouchableOpacity style={styles.gridCard}>
+              <View style={[styles.gridIcon, { backgroundColor: 'rgba(37, 99, 235, 0.15)' }]}>
+                <Ionicons name="chatbubbles" size={22} color={COLORS.primaryLight} />
+              </View>
+              <Text style={styles.gridTitle}>Live Chat</Text>
+              <Text style={styles.gridDesc}>Chat with AI & Agents</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.gridCard}>
+              <View style={[styles.gridIcon, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
+                <Ionicons name="call" size={22} color={COLORS.success} />
+              </View>
+              <Text style={styles.gridTitle}>Call Support</Text>
+              <Text style={styles.gridDesc}>Speak to Executive</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* FAQs Section */}
+          <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
+          {FAQS.map((item, idx) => (
+            <View key={idx} style={styles.faqCard}>
+              <Text style={styles.faqQ}>Q: {item.q}</Text>
+              <Text style={styles.faqA}>{item.a}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

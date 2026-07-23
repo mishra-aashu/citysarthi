@@ -9,12 +9,14 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 export default function BookingSummaryScreen({ vehicle, onBack, onProceedToPayment }) {
   const v = vehicle || { name: 'Hyundai Creta 2023', price: 89 };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
       <View style={styles.topHeader}>
         <TouchableOpacity style={styles.backBtn} onPress={onBack}>
           <Ionicons name="arrow-back" size={20} color={COLORS.textPrimary} />
@@ -69,6 +71,7 @@ export default function BookingSummaryScreen({ vehicle, onBack, onProceedToPayme
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

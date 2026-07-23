@@ -11,6 +11,7 @@ import {
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
 import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 export default function VehicleDetailsScreen({ vehicle, onBack, onBookNow }) {
   const v = vehicle || {
@@ -28,7 +29,8 @@ export default function VehicleDetailsScreen({ vehicle, onBack, onBookNow }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
       {/* Top Header */}
       <View style={styles.topHeader}>
         <TouchableOpacity style={styles.backBtn} onPress={onBack}>
@@ -134,6 +136,7 @@ export default function VehicleDetailsScreen({ vehicle, onBack, onBookNow }) {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

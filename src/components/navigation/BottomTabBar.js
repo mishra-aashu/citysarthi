@@ -11,10 +11,15 @@ const TABS = [
   { id: 'Profile', label: 'Profile', icon: 'person', iconOutline: 'person-outline' },
 ];
 
+import { useWindowDimensions } from 'react-native';
+
 export default function BottomTabBar({ activeTab, onTabChange }) {
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
+
   return (
     <View style={styles.container}>
-      <View style={styles.tabBar}>
+      <View style={[styles.tabBar, isDesktop && styles.desktopTabBar]}>
         {TABS.map((tab) => {
           const isActive = activeTab === tab.id;
           const iconName = isActive ? tab.icon : tab.iconOutline;
@@ -65,6 +70,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 12,
+  },
+  desktopTabBar: {
+    maxWidth: 1200,
+    alignSelf: 'center',
+    width: '100%',
+    borderRadius: 16,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   tabItem: {
     flex: 1,

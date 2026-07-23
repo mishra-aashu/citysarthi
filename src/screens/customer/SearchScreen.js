@@ -12,6 +12,7 @@ import {
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
 import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 const ALL_VEHICLES = [
   {
@@ -81,7 +82,8 @@ export default function SearchScreen({ onSelectVehicle }) {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Search Vehicles</Text>
         <Text style={styles.subtitle}>Find cars, bikes, autos & tempos near you</Text>
@@ -165,6 +167,7 @@ export default function SearchScreen({ onSelectVehicle }) {
         ))}
       </ScrollView>
     </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

@@ -9,84 +9,87 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 export default function PaymentScreen({ onBack, onPaymentSuccess }) {
   const [selectedMethod, setSelectedMethod] = useState('upi');
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topHeader}>
-        <TouchableOpacity style={styles.backBtn} onPress={onBack}>
-          <Ionicons name="arrow-back" size={20} color={COLORS.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.topHeaderTitle}>Payment Gateway</Text>
-        <View style={{ width: 36 }} />
-      </View>
-
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.amountBox}>
-          <Text style={styles.amountLabel}>AMOUNT TO PAY</Text>
-          <Text style={styles.amountVal}>₹2,829.00</Text>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.topHeader}>
+          <TouchableOpacity style={styles.backBtn} onPress={onBack}>
+            <Ionicons name="arrow-back" size={20} color={COLORS.textPrimary} />
+          </TouchableOpacity>
+          <Text style={styles.topHeaderTitle}>Payment Gateway</Text>
+          <View style={{ width: 36 }} />
         </View>
 
-        <Text style={styles.sectionHeader}>Select Payment Option</Text>
-
-        <TouchableOpacity
-          style={[styles.methodCard, selectedMethod === 'upi' && styles.activeMethodCard]}
-          onPress={() => setSelectedMethod('upi')}
-        >
-          <Ionicons name="qr-code-outline" size={22} color={COLORS.primaryLight} />
-          <View style={styles.methodInfo}>
-            <Text style={styles.methodTitle}>UPI (Google Pay, PhonePe, Paytm)</Text>
-            <Text style={styles.methodSub}>Instant 0% convenience fee payment</Text>
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          <View style={styles.amountBox}>
+            <Text style={styles.amountLabel}>AMOUNT TO PAY</Text>
+            <Text style={styles.amountVal}>₹2,829.00</Text>
           </View>
-          <Ionicons
-            name={selectedMethod === 'upi' ? 'checkmark-circle' : 'ellipse-outline'}
-            size={22}
-            color={selectedMethod === 'upi' ? COLORS.primaryLight : COLORS.textMuted}
-          />
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.methodCard, selectedMethod === 'wallet' && styles.activeMethodCard]}
-          onPress={() => setSelectedMethod('wallet')}
-        >
-          <Ionicons name="wallet-outline" size={22} color={COLORS.accent} />
-          <View style={styles.methodInfo}>
-            <Text style={styles.methodTitle}>CitySarthi Wallet (Balance: ₹1,450)</Text>
-            <Text style={styles.methodSub}>Pay ₹1,450 via Wallet + rest ₹1,379 via UPI</Text>
-          </View>
-          <Ionicons
-            name={selectedMethod === 'wallet' ? 'checkmark-circle' : 'ellipse-outline'}
-            size={22}
-            color={selectedMethod === 'wallet' ? COLORS.primaryLight : COLORS.textMuted}
-          />
-        </TouchableOpacity>
+          <Text style={styles.sectionHeader}>Select Payment Option</Text>
 
-        <TouchableOpacity
-          style={[styles.methodCard, selectedMethod === 'card' && styles.activeMethodCard]}
-          onPress={() => setSelectedMethod('card')}
-        >
-          <Ionicons name="card-outline" size={22} color={COLORS.success} />
-          <View style={styles.methodInfo}>
-            <Text style={styles.methodTitle}>Credit / Debit Card</Text>
-            <Text style={styles.methodSub}>Visa, Mastercard, RuPay, Amex</Text>
-          </View>
-          <Ionicons
-            name={selectedMethod === 'card' ? 'checkmark-circle' : 'ellipse-outline'}
-            size={22}
-            color={selectedMethod === 'card' ? COLORS.primaryLight : COLORS.textMuted}
-          />
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity
+            style={[styles.methodCard, selectedMethod === 'upi' && styles.activeMethodCard]}
+            onPress={() => setSelectedMethod('upi')}
+          >
+            <Ionicons name="qr-code-outline" size={22} color={COLORS.primaryLight} />
+            <View style={styles.methodInfo}>
+              <Text style={styles.methodTitle}>UPI (Google Pay, PhonePe, Paytm)</Text>
+              <Text style={styles.methodSub}>Instant 0% convenience fee payment</Text>
+            </View>
+            <Ionicons
+              name={selectedMethod === 'upi' ? 'checkmark-circle' : 'ellipse-outline'}
+              size={22}
+              color={selectedMethod === 'upi' ? COLORS.primaryLight : COLORS.textMuted}
+            />
+          </TouchableOpacity>
 
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.payNowBtn} onPress={onPaymentSuccess}>
-          <Ionicons name="lock-closed" size={16} color={COLORS.white} />
-          <Text style={styles.payNowText}>Pay Securely ₹2,829</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          <TouchableOpacity
+            style={[styles.methodCard, selectedMethod === 'wallet' && styles.activeMethodCard]}
+            onPress={() => setSelectedMethod('wallet')}
+          >
+            <Ionicons name="wallet-outline" size={22} color={COLORS.accent} />
+            <View style={styles.methodInfo}>
+              <Text style={styles.methodTitle}>CitySarthi Wallet (Balance: ₹1,450)</Text>
+              <Text style={styles.methodSub}>Pay ₹1,450 via Wallet + rest ₹1,379 via UPI</Text>
+            </View>
+            <Ionicons
+              name={selectedMethod === 'wallet' ? 'checkmark-circle' : 'ellipse-outline'}
+              size={22}
+              color={selectedMethod === 'wallet' ? COLORS.primaryLight : COLORS.textMuted}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.methodCard, selectedMethod === 'card' && styles.activeMethodCard]}
+            onPress={() => setSelectedMethod('card')}
+          >
+            <Ionicons name="card-outline" size={22} color={COLORS.success} />
+            <View style={styles.methodInfo}>
+              <Text style={styles.methodTitle}>Credit / Debit Card</Text>
+              <Text style={styles.methodSub}>Visa, Mastercard, RuPay, Amex</Text>
+            </View>
+            <Ionicons
+              name={selectedMethod === 'card' ? 'checkmark-circle' : 'ellipse-outline'}
+              size={22}
+              color={selectedMethod === 'card' ? COLORS.primaryLight : COLORS.textMuted}
+            />
+          </TouchableOpacity>
+        </ScrollView>
+
+        <View style={styles.bottomBar}>
+          <TouchableOpacity style={styles.payNowBtn} onPress={onPaymentSuccess}>
+            <Ionicons name="lock-closed" size={16} color={COLORS.white} />
+            <Text style={styles.payNowText}>Pay Securely ₹2,829</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 

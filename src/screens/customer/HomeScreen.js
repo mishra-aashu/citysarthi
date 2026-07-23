@@ -9,10 +9,12 @@ import {
   TextInput,
   Image,
   Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../config/theme';
 import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
+import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
 const { width } = Dimensions.get('window');
 
@@ -79,10 +81,13 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
   const [tripType, setTripType] = useState('self_drive'); // 'self_drive' or 'ride'
   const [pickupLoc, setPickupLoc] = useState('Current Location (Sector 62, Noida)');
   const [dropLoc, setDropLoc] = useState('');
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+    <ResponsiveContainer>
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Top Header */}
         <View style={styles.header}>
           <View style={styles.logoRow}>
@@ -236,58 +241,61 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
           </TouchableOpacity>
         </View>
 
-        {NEARBY_VEHICLES.map((v) => (
-          <TouchableOpacity
-            key={v.id}
-            style={styles.vehicleCard}
-            onPress={() => onSelectVehicle && onSelectVehicle(v)}
-            activeOpacity={0.85}
-          >
-            <VehicleImageCard imageUri={v.image} type={v.type} height={160} />
-            <View style={styles.vehicleBadgeContainer}>
-              <Text style={styles.vehicleTypeTag}>{v.type}</Text>
-            </View>
-
-            <View style={styles.vehicleInfo}>
-              <View style={styles.vehicleRow}>
-                <Text style={styles.vehicleName}>{v.name}</Text>
-                <View style={styles.ratingBox}>
-                  <Ionicons name="star" size={14} color={COLORS.accent} />
-                  <Text style={styles.ratingText}>{v.rating}</Text>
-                </View>
+        <View style={isDesktop ? styles.desktopGrid : null}>
+          {NEARBY_VEHICLES.map((v) => (
+            <TouchableOpacity
+              key={v.id}
+              style={[styles.vehicleCard, isDesktop && styles.desktopVehicleCard]}
+              onPress={() => onSelectVehicle && onSelectVehicle(v)}
+              activeOpacity={0.85}
+            >
+              <VehicleImageCard imageUri={v.image} type={v.type} height={160} />
+              <View style={styles.vehicleBadgeContainer}>
+                <Text style={styles.vehicleTypeTag}>{v.type}</Text>
               </View>
 
-              <Text style={styles.vehicleLoc}>
-                <Ionicons name="location-outline" size={12} color={COLORS.textMuted} /> {v.location}
-              </Text>
-
-              <View style={styles.specChips}>
-                <View style={styles.chip}><Text style={styles.chipText}>{v.transmission}</Text></View>
-                <View style={styles.chip}><Text style={styles.chipText}>{v.fuel}</Text></View>
-                <View style={styles.chip}><Text style={styles.chipText}>{v.seats} Seats</Text></View>
-              </View>
-
-              <View style={styles.cardFooter}>
-                <View style={styles.priceContainer}>
-                  <Text style={styles.priceAmount}>₹{v.price}</Text>
-                  <Text style={styles.priceUnit}>/{v.priceUnit}</Text>
+              <View style={styles.vehicleInfo}>
+                <View style={styles.vehicleRow}>
+                  <Text style={styles.vehicleName}>{v.name}</Text>
+                  <View style={styles.ratingBox}>
+                    <Ionicons name="star" size={14} color={COLORS.accent} />
+                    <Text style={styles.ratingText}>{v.rating}</Text>
+                  </View>
                 </View>
 
-                <TouchableOpacity
-                  style={styles.bookBtn}
-                  onPress={() => onSelectVehicle && onSelectVehicle(v)}
-                >
-                  <Text style={styles.bookBtnText}>Book Now</Text>
-                  <Ionicons name="arrow-forward" size={14} color={COLORS.white} />
-                </TouchableOpacity>
+                <Text style={styles.vehicleLoc}>
+                  <Ionicons name="location-outline" size={12} color={COLORS.textMuted} /> {v.location}
+                </Text>
+
+                <View style={styles.specChips}>
+                  <View style={styles.chip}><Text style={styles.chipText}>{v.transmission}</Text></View>
+                  <View style={styles.chip}><Text style={styles.chipText}>{v.fuel}</Text></View>
+                  <View style={styles.chip}><Text style={styles.chipText}>{v.seats} Seats</Text></View>
+                </View>
+
+                <View style={styles.cardFooter}>
+                  <View style={styles.priceContainer}>
+                    <Text style={styles.priceAmount}>₹{v.price}</Text>
+                    <Text style={styles.priceUnit}>/{v.priceUnit}</Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.bookBtn}
+                    onPress={() => onSelectVehicle && onSelectVehicle(v)}
+                  >
+                    <Text style={styles.bookBtnText}>Book Now</Text>
+                    <Ionicons name="arrow-forward" size={14} color={COLORS.white} />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
+        </View>
 
         <View style={{ height: 24 }} />
       </ScrollView>
     </SafeAreaView>
+    </ResponsiveContainer>
   );
 }
 
@@ -488,4 +496,13 @@ const styles = StyleSheet.create({
   priceUnit: { fontSize: 12, color: COLORS.textMuted, marginLeft: 2 },
   bookBtn: { flexDirection: 'row', backgroundColor: COLORS.primary, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, alignItems: 'center', gap: 4 },
   bookBtnText: { color: COLORS.white, fontWeight: '700', fontSize: 13 },
+  desktopGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+    justifyContent: 'space-between',
+  },
+  desktopVehicleCard: {
+    width: '48.5%',
+  },
 });
