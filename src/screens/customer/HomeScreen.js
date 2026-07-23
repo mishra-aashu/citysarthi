@@ -225,7 +225,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
             <Ionicons
               name="gift-outline"
               size={54}
-              color={isDark ? 'rgba(255,255,255,0.2)' : 'rgba(37, 99, 235, 0.15)'}
+              color={isDark ? 'rgba(255,255,255,0.2)' : 'rgba(243, 163, 20, 0.18)'}
               style={styles.promoBgIcon}
             />
           </View>
@@ -419,16 +419,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     right: 6,
-    paddingHorizontal: 5,
+    paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
   },
-  catBadgeText: { fontSize: 8, fontWeight: '800', color: '#000000' },
+  catBadgeText: { fontSize: 9, fontWeight: '800', color: '#FFFFFF' },
   catIconCircle: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(37, 99, 235, 0.12)',
+    backgroundColor: 'rgba(243, 163, 20, 0.12)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,

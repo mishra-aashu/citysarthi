@@ -34,7 +34,7 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
               key={tab.id}
               style={[
                 styles.tabItem,
-                isActive && { backgroundColor: 'rgba(37, 99, 235, 0.1)' },
+                isActive && { backgroundColor: 'rgba(243, 163, 20, 0.12)' },
               ]}
               onPress={() => onTabChange(tab.id)}
               activeOpacity={0.7}
@@ -43,14 +43,14 @@ export default function BottomTabBar({ activeTab, onTabChange }) {
                 <Ionicons
                   name={iconName}
                   size={22}
-                  color={isActive ? colors.primaryLight : colors.textMuted}
+                  color={isActive ? colors.primary : colors.textMuted}
                 />
-                {isActive && <View style={[styles.activeDot, { backgroundColor: colors.primaryLight }]} />}
+                {isActive && <View style={[styles.activeDot, { backgroundColor: colors.primary }]} />}
               </View>
               <Text
                 style={[
                   styles.tabLabel,
-                  { color: isActive ? colors.primaryLight : colors.textMuted },
+                  { color: isActive ? colors.primary : colors.textMuted },
                   isActive && styles.activeTabLabel,
                 ]}
               >
@@ -106,25 +106,23 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justify: 'center',
     position: 'relative',
-    height: 28,
-    width: 28,
   },
   activeIconContainer: {
-    transform: [{ scale: 1.05 }],
+    transform: [{ translateY: -1 }],
   },
   activeDot: {
     position: 'absolute',
-    bottom: -2,
+    bottom: -4,
     width: 4,
     height: 4,
     borderRadius: 2,
   },
   tabLabel: {
     fontSize: 11,
-    fontWeight: '500',
     marginTop: 3,
+    fontWeight: '500',
   },
   activeTabLabel: {
     fontWeight: '700',

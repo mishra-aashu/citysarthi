@@ -52,7 +52,7 @@ export default function SupportScreen() {
           <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Quick Support</Text>
           <View style={styles.grid}>
             <TouchableOpacity style={[styles.gridCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-              <View style={[styles.gridIcon, { backgroundColor: 'rgba(37, 99, 235, 0.15)' }]}>
+              <View style={[styles.gridIcon, { backgroundColor: 'rgba(243, 163, 20, 0.15)' }]}>
                 <Ionicons name="chatbubbles" size={22} color={colors.primaryLight} />
               </View>
               <Text style={[styles.gridTitle, { color: colors.textPrimary }]}>Live Chat</Text>

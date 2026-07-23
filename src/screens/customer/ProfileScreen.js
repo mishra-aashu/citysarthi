@@ -61,7 +61,7 @@ export default function ProfileScreen() {
                 style={[
                   styles.themeOptionBtn,
                   { backgroundColor: colors.background, borderColor: colors.cardBorder },
-                  themeMode === 'light' && { backgroundColor: 'rgba(37, 99, 235, 0.12)', borderColor: colors.primary },
+                  themeMode === 'light' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
                 ]}
                 onPress={() => setThemeMode('light')}
                 activeOpacity={0.8}
@@ -86,7 +86,7 @@ export default function ProfileScreen() {
                 style={[
                   styles.themeOptionBtn,
                   { backgroundColor: colors.background, borderColor: colors.cardBorder },
-                  themeMode === 'dark' && { backgroundColor: 'rgba(37, 99, 235, 0.12)', borderColor: colors.primary },
+                  themeMode === 'dark' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
                 ]}
                 onPress={() => setThemeMode('dark')}
                 activeOpacity={0.8}
@@ -111,7 +111,7 @@ export default function ProfileScreen() {
                 style={[
                   styles.themeOptionBtn,
                   { backgroundColor: colors.background, borderColor: colors.cardBorder },
-                  themeMode === 'system' && { backgroundColor: 'rgba(37, 99, 235, 0.12)', borderColor: colors.primary },
+                  themeMode === 'system' && { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary },
                 ]}
                 onPress={() => setThemeMode('system')}
                 activeOpacity={0.8}
@@ -135,7 +135,7 @@ export default function ProfileScreen() {
           </View>
 
           {/* Wallet Card */}
-          <View style={[styles.walletCard, { backgroundColor: 'rgba(37, 99, 235, 0.12)', borderColor: colors.primary }]}>
+          <View style={[styles.walletCard, { backgroundColor: 'rgba(243, 163, 20, 0.12)', borderColor: colors.primary }]}>
             <View>
               <Text style={[styles.walletLabel, { color: colors.textMuted }]}>CitySarthi Wallet Balance</Text>
               <Text style={[styles.walletVal, { color: colors.primaryLight }]}>₹1,450.00</Text>

@@ -26,8 +26,8 @@ export default function VehicleImageCard({ imageUri, type, height = 150 }) {
           { height, backgroundColor: colors.surfaceLight, borderBottomColor: colors.cardBorder },
         ]}
       >
-        <View style={styles.iconCircle}>
-          <MaterialCommunityIcons name={getIconForType(type)} size={48} color={colors.primaryLight} />
+        <View style={[styles.iconCircle, { backgroundColor: 'rgba(243, 163, 20, 0.12)' }]}>
+          <MaterialCommunityIcons name={getIconForType(type)} size={48} color={colors.primary} />
         </View>
         <View style={styles.badgeRow}>
           <Ionicons name="car-sport" size={14} color={colors.accent} />
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: 'rgba(37, 99, 235, 0.12)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,

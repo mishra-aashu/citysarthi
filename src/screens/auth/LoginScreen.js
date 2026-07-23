@@ -10,14 +10,15 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../config/theme';
 import { AuthContext } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { loginWithPhone } from '../../services/authService';
 
 export default function LoginScreen({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
+  const { colors } = useTheme();
 
   const handleSendOtp = async () => {
     if (!phoneNumber || phoneNumber.length < 10) {
@@ -35,21 +36,21 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        <View style={styles.logoCircle}>
-          <Ionicons name="car-sport" size={40} color={COLORS.primaryLight} />
+        <View style={[styles.logoCircle, { backgroundColor: 'rgba(243, 163, 20, 0.15)' }]}>
+          <Ionicons name="car-sport" size={40} color={colors.primary} />
         </View>
 
-        <Text style={styles.title}>City<Text style={styles.highlight}>Sarthi</Text></Text>
-        <Text style={styles.subtitle}>Enter your mobile number to start vehicle booking & rentals</Text>
+        <Text style={[styles.title, { color: colors.textPrimary }]}>City<Text style={{ color: colors.primary }}>Sarthi</Text></Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Enter your mobile number to start vehicle booking & rentals</Text>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.countryCode}>+91</Text>
+        <View style={[styles.inputContainer, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+          <Text style={[styles.countryCode, { color: colors.textPrimary }]}>+91</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: colors.textPrimary }]}
             placeholder="Mobile Number"
-            placeholderTextColor={COLORS.textMuted}
+            placeholderTextColor={colors.textMuted}
             keyboardType="phone-pad"
             maxLength={10}
             value={phoneNumber}
@@ -57,21 +58,21 @@ export default function LoginScreen({ navigation }) {
           />
         </View>
 
-        <TouchableOpacity style={styles.submitBtn} onPress={handleSendOtp} disabled={loading}>
+        <TouchableOpacity style={[styles.submitBtn, { backgroundColor: colors.primary }]} onPress={handleSendOtp} disabled={loading}>
           {loading ? (
-            <ActivityIndicator color={COLORS.white} />
+            <ActivityIndicator color="#FFFFFF" />
           ) : (
             <>
               <Text style={styles.submitBtnText}>Get OTP Code</Text>
-              <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
+              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
             </>
           )}
         </TouchableOpacity>
 
         <View style={styles.footerRow}>
-          <Text style={styles.footerText}>New to CitySarthi? </Text>
+          <Text style={[styles.footerText, { color: colors.textMuted }]}>New to CitySarthi? </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.registerLink}>Register Account</Text>
+            <Text style={[styles.registerLink, { color: colors.primary }]}>Register Account</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -80,37 +81,32 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
+  container: { flex: 1 },
   content: { flex: 1, padding: 24, justifyContent: 'center', alignItems: 'center' },
   logoCircle: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(37, 99, 235, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
-  title: { fontSize: 30, fontWeight: 'bold', color: COLORS.textPrimary },
-  highlight: { color: COLORS.primaryLight },
-  subtitle: { fontSize: 13, color: COLORS.textSecondary, marginTop: 8, textAlign: 'center', marginBottom: 32 },
+  title: { fontSize: 30, fontWeight: 'bold' },
+  subtitle: { fontSize: 13, marginTop: 8, textAlign: 'center', marginBottom: 32 },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: COLORS.surfaceLight,
     paddingHorizontal: 16,
     height: 52,
     width: '100%',
     marginBottom: 20,
   },
-  countryCode: { fontSize: 15, fontWeight: '700', color: COLORS.textPrimary, marginRight: 10 },
-  input: { flex: 1, color: COLORS.textPrimary, fontSize: 15 },
+  countryCode: { fontSize: 15, fontWeight: '700', marginRight: 10 },
+  input: { flex: 1, fontSize: 15 },
   submitBtn: {
     flexDirection: 'row',
-    backgroundColor: COLORS.primary,
     height: 52,
     borderRadius: 12,
     width: '100%',
@@ -118,8 +114,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  submitBtnText: { color: COLORS.white, fontSize: 16, fontWeight: '700' },
+  submitBtnText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
   footerRow: { flexDirection: 'row', marginTop: 24 },
-  footerText: { color: COLORS.textMuted, fontSize: 14 },
-  registerLink: { color: COLORS.primaryLight, fontWeight: '700', fontSize: 14 },
+  footerText: { fontSize: 14 },
+  registerLink: { fontWeight: '700', fontSize: 14 },
 });

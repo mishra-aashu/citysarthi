@@ -1,57 +1,64 @@
 import { Platform } from 'react-native';
 
+/**
+ * CitySarthi High-Contrast Theme System
+ * Primary Brand: Golden Amber (#F59E0B / #F4AC1C)
+ * Dark Canvas: Deep Midnight Slate (#0F141C / #1A202C)
+ * Light Canvas: Warm Creamy Ivory (#FAF8F5 / #FFFFFF)
+ */
+
 export const DARK_COLORS = {
-  primary: '#2563EB',      // Deep Royal Blue
-  primaryDark: '#1D4ED8',  // Darker Blue
-  primaryLight: '#60A5FA', // Light Blue Accent for dark background
-  accent: '#F59E0B',       // Amber Accent
-  background: '#0F172A',   // Slate Dark
-  surface: '#1E293B',      // Card Surface Dark
-  surfaceLight: '#334155', // Input/Border Surface Dark
-  textPrimary: '#F8FAFC',  // Light Text
-  textSecondary: '#94A3B8',
-  textMuted: '#64748B',
+  primary: '#F59E0B',        // Vibrant Golden Amber
+  primaryDark: '#D97706',    // Deep Amber
+  primaryLight: '#FBBF24',   // Bright Gold Accent (High Contrast for Dark Mode)
+  accent: '#F59E0B',         // Golden Accent
+  background: '#0F141C',     // Ultra-Deep Midnight Slate Canvas
+  surface: '#1A202C',        // Elevated Dark Card Surface
+  surfaceLight: '#2D3748',   // Input / Border Surface Dark
+  textPrimary: '#F8FAFC',    // Pure High-Contrast White Text
+  textSecondary: '#CBD5E1',  // Clear Light Slate Secondary Text
+  textMuted: '#94A3B8',      // Muted Label Text
   success: '#10B981',
   danger: '#EF4444',
   warning: '#F59E0B',
   white: '#FFFFFF',
   black: '#000000',
-  glass: 'rgba(30, 41, 59, 0.75)',
-  cardBorder: 'rgba(255, 255, 255, 0.08)',
-  subtleBorder: 'rgba(255, 255, 255, 0.06)',
-  inputBg: '#0F172A',
-  tabBarBg: '#1E293B',
-  promoBg: '#1E1B4B',
-  promoBorder: '#4338CA',
-  promoTitle: '#FFFFFF',
-  promoDesc: '#C7D2FE',
+  glass: 'rgba(26, 32, 44, 0.88)',
+  cardBorder: 'rgba(245, 158, 11, 0.22)',
+  subtleBorder: 'rgba(255, 255, 255, 0.08)',
+  inputBg: '#0F141C',
+  tabBarBg: '#1A202C',
+  promoBg: '#281E15',
+  promoBorder: '#D97706',
+  promoTitle: '#FBBF24',
+  promoDesc: '#E2E8F0',
 };
 
 export const LIGHT_COLORS = {
-  primary: '#2563EB',      // Deep Royal Blue
-  primaryDark: '#1D4ED8',  // Darker Blue
-  primaryLight: '#2563EB', // Rich Royal Blue for light mode
-  accent: '#D97706',       // Warm Amber Accent
-  background: '#F1F5F9',   // Slate 100 - Crisp Clean Light Background
-  surface: '#FFFFFF',      // Pure White Card Surface
-  surfaceLight: '#E2E8F0', // Slate 200 - Input/Border Surface
-  textPrimary: '#0F172A',  // Slate 900 - High-contrast Dark Text
-  textSecondary: '#475569',// Slate 600 - Medium Dark Text
-  textMuted: '#64748B',    // Slate 500 - Muted Text
-  success: '#059669',      // Rich Green
-  danger: '#DC2626',       // Rich Red
+  primary: '#F59E0B',        // Vibrant Golden Amber
+  primaryDark: '#D97706',    // Deep Amber
+  primaryLight: '#B45309',   // High-Contrast Deep Amber Bronze for light mode text & icons
+  accent: '#D97706',         // Rich Amber Accent
+  background: '#FAF8F5',     // Warm Creamy Ivory Light Canvas
+  surface: '#FFFFFF',        // Pure Crisp White Surface
+  surfaceLight: '#EDE7DF',   // Input / Border Surface Light
+  textPrimary: '#0F172A',    // High-Contrast Dark Slate Text
+  textSecondary: '#334155',  // Medium Dark Slate Text
+  textMuted: '#64748B',      // Slate Muted Text
+  success: '#059669',
+  danger: '#DC2626',
   warning: '#D97706',
   white: '#FFFFFF',
   black: '#000000',
-  glass: 'rgba(255, 255, 255, 0.88)',
-  cardBorder: 'rgba(0, 0, 0, 0.08)',
-  subtleBorder: 'rgba(0, 0, 0, 0.06)',
-  inputBg: '#F8FAFC',
+  glass: 'rgba(255, 255, 255, 0.92)',
+  cardBorder: 'rgba(217, 119, 6, 0.18)',
+  subtleBorder: 'rgba(0, 0, 0, 0.08)',
+  inputBg: '#F5F1EA',
   tabBarBg: '#FFFFFF',
-  promoBg: '#EEF2FF',
-  promoBorder: '#C7D2FE',
-  promoTitle: '#1E1B4B',
-  promoDesc: '#4338CA',
+  promoBg: '#FFF8EE',
+  promoBorder: '#F59E0B',
+  promoTitle: '#1E160A',
+  promoDesc: '#B45309',
 };
 
 // Current active color palette reference
@@ -100,14 +107,14 @@ export const SPACING = {
 export const SHADOWS = {
   card: Platform.select({
     web: {
-      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+      boxShadow: '0px 4px 14px rgba(0, 0, 0, 0.12)',
     },
     default: {
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.1,
-      shadowRadius: 6,
-      elevation: 3,
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+      elevation: 6,
     },
   }),
 };

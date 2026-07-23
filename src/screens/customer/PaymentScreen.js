@@ -38,7 +38,7 @@ export default function PaymentScreen({ onBack, onPaymentSuccess }) {
             style={[
               styles.methodCard,
               { backgroundColor: colors.surface, borderColor: colors.cardBorder },
-              selectedMethod === 'upi' && { borderColor: colors.primary, backgroundColor: 'rgba(37, 99, 235, 0.08)' },
+              selectedMethod === 'upi' && { borderColor: colors.primary, backgroundColor: 'rgba(243, 163, 20, 0.08)' },
             ]}
             onPress={() => setSelectedMethod('upi')}
           >
@@ -58,7 +58,7 @@ export default function PaymentScreen({ onBack, onPaymentSuccess }) {
             style={[
               styles.methodCard,
               { backgroundColor: colors.surface, borderColor: colors.cardBorder },
-              selectedMethod === 'wallet' && { borderColor: colors.primary, backgroundColor: 'rgba(37, 99, 235, 0.08)' },
+              selectedMethod === 'wallet' && { borderColor: colors.primary, backgroundColor: 'rgba(243, 163, 20, 0.08)' },
             ]}
             onPress={() => setSelectedMethod('wallet')}
           >
@@ -78,7 +78,7 @@ export default function PaymentScreen({ onBack, onPaymentSuccess }) {
             style={[
               styles.methodCard,
               { backgroundColor: colors.surface, borderColor: colors.cardBorder },
-              selectedMethod === 'card' && { borderColor: colors.primary, backgroundColor: 'rgba(37, 99, 235, 0.08)' },
+              selectedMethod === 'card' && { borderColor: colors.primary, backgroundColor: 'rgba(243, 163, 20, 0.08)' },
             ]}
             onPress={() => setSelectedMethod('card')}
           >
