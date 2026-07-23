@@ -36,5 +36,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
+    outlineStyle: 'none',
+    outlineWidth: 0,
   },
 });

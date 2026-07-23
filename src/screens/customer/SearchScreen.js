@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 8,
   },
-  searchInput: { flex: 1, fontSize: 14 },
+  searchInput: { flex: 1, fontSize: 14, outlineStyle: 'none', outlineWidth: 0 },
   filtersScroll: { marginTop: 12, marginHorizontal: -16, paddingHorizontal: 16 },
   filterChip: {
     paddingHorizontal: 14,

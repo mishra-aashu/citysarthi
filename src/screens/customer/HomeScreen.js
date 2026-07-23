@@ -143,6 +143,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
                 onChangeText={setPickupLoc}
                 placeholder="Pickup Address / City"
                 placeholderTextColor={colors.textMuted}
+                underlineColorAndroid="transparent"
               />
             </View>
 
@@ -155,6 +156,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
                   onChangeText={setDropLoc}
                   placeholder="Where to? (Destination)"
                   placeholderTextColor={colors.textMuted}
+                  underlineColorAndroid="transparent"
                 />
               </View>
             )}
@@ -291,7 +293,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
                       onPress={() => onSelectVehicle && onSelectVehicle(v)}
                     >
                       <Text style={styles.bookBtnText}>Book Now</Text>
-                      <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                      <Ionicons name="arrow-forward" size={14} color="#000000" />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -308,8 +310,8 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollContent: { paddingHorizontal: 16, paddingTop: 12 },
-  header: { marginBottom: 16 },
+  scrollContent: { paddingHorizontal: 18, paddingTop: 14, paddingBottom: 40 },
+  header: { marginBottom: 18 },
   logoRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   brandContainer: { flexDirection: 'row', alignItems: 'center' },
   brandTitle: { fontSize: 22, fontWeight: 'bold', marginLeft: 8 },
@@ -344,10 +346,10 @@ const styles = StyleSheet.create({
   locationBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 12,
-    marginTop: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 14,
+    marginTop: 14,
     borderWidth: 1,
   },
   locationTextContainer: { flex: 1, marginLeft: 8 },
@@ -358,14 +360,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 5,
     borderRadius: 30,
-    marginBottom: 16,
+    marginBottom: 20,
+    gap: 4,
   },
   tripTypeTab: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
+    paddingVertical: 11,
     borderRadius: 24,
     gap: 6,
   },
@@ -373,59 +376,62 @@ const styles = StyleSheet.create({
 
   searchCard: {
     borderRadius: 20,
-    padding: 16,
-    marginBottom: 20,
+    padding: 18,
+    marginBottom: 24,
     borderWidth: 1,
   },
-  searchCardTitle: { fontSize: 15, fontWeight: '700', marginBottom: 12 },
+  searchCardTitle: { fontSize: 16, fontWeight: '800', marginBottom: 14 },
   inputGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     borderWidth: 1,
   },
   inputDot: { marginRight: 8 },
-  input: { flex: 1, fontSize: 13 },
+  input: { flex: 1, fontSize: 13, outlineStyle: 'none', outlineWidth: 0 },
   searchBtn: {
     flexDirection: 'row',
     borderRadius: 28,
     paddingVertical: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 14,
+    marginTop: 16,
     gap: 8,
   },
   searchBtnText: { color: '#000000', fontWeight: '800', fontSize: 15, letterSpacing: 0.3 },
 
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  sectionTitle: { fontSize: 17, fontWeight: '700' },
-  seeAllText: { fontSize: 13, fontWeight: '600' },
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, marginBottom: 14 },
+  sectionTitle: { fontSize: 18, fontWeight: '800' },
+  seeAllText: { fontSize: 13, fontWeight: '700' },
 
-  categoriesScroll: { marginBottom: 20, marginHorizontal: -16, paddingHorizontal: 16 },
+  categoriesScroll: { marginBottom: 24, marginHorizontal: -18, paddingHorizontal: 18 },
   catCard: {
-    width: 105,
+    width: 112,
     padding: 12,
-    borderRadius: 14,
-    marginRight: 10,
+    paddingTop: 16,
+    paddingBottom: 14,
+    borderRadius: 16,
+    marginRight: 12,
     alignItems: 'center',
     position: 'relative',
     borderWidth: 1,
   },
   catBadge: {
     position: 'absolute',
-    top: 6,
-    right: 6,
+    top: 5,
+    right: 5,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 6,
+    borderRadius: 8,
+    zIndex: 10,
   },
-  catBadgeText: { fontSize: 9, fontWeight: '800', color: '#FFFFFF' },
+  catBadgeText: { fontSize: 8, fontWeight: '800', color: '#FFFFFF' },
   catIconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     backgroundColor: 'rgba(243, 163, 20, 0.12)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -433,12 +439,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   catName: { fontSize: 12, fontWeight: '700', textAlign: 'center' },
-  catPrice: { fontSize: 10, marginTop: 2 },
+  catPrice: { fontSize: 10, marginTop: 2, fontWeight: '500' },
 
   promoCard: {
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 20,
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 24,
     position: 'relative',
     overflow: 'hidden',
     borderWidth: 1,
@@ -451,8 +457,8 @@ const styles = StyleSheet.create({
   promoBgIcon: { position: 'absolute', right: -10, bottom: -10, zIndex: 1 },
 
   vehicleCard: {
-    borderRadius: 16,
-    marginBottom: 16,
+    borderRadius: 18,
+    marginBottom: 20,
     overflow: 'hidden',
     borderWidth: 1,
   },
@@ -464,7 +470,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 6,
   },
-  vehicleInfo: { padding: 14 },
+  vehicleInfo: { padding: 16 },
   vehicleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   vehicleName: { fontSize: 16, fontWeight: '700' },
   ratingBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(245, 158, 11, 0.15)', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6, gap: 4 },
@@ -477,8 +483,8 @@ const styles = StyleSheet.create({
   priceContainer: { flexDirection: 'row', alignItems: 'baseline' },
   priceAmount: { fontSize: 20, fontWeight: '800' },
   priceUnit: { fontSize: 12, marginLeft: 2 },
-  bookBtn: { flexDirection: 'row', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, alignItems: 'center', gap: 4 },
-  bookBtnText: { color: '#FFFFFF', fontWeight: '700', fontSize: 13 },
+  bookBtn: { flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 9, borderRadius: 20, alignItems: 'center', gap: 4 },
+  bookBtnText: { color: '#000000', fontWeight: '800', fontSize: 13 },
   desktopGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

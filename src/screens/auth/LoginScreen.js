@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   countryCode: { fontSize: 15, fontWeight: '700', marginRight: 10 },
-  input: { flex: 1, fontSize: 15 },
+  input: { flex: 1, fontSize: 15, outlineStyle: 'none', outlineWidth: 0 },
   submitBtn: {
     flexDirection: 'row',
     height: 52,
