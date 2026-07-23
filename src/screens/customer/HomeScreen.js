@@ -16,6 +16,8 @@ import { COLORS } from '../../config/theme';
 import VehicleImageCard from '../../components/vehicle/VehicleImageCard';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
+import { getVehicles, STATIC_VEHICLES } from '../../services/vehicleService';
+
 const { width } = Dimensions.get('window');
 
 const CATEGORIES = [
@@ -29,60 +31,27 @@ const CATEGORIES = [
   { id: 'bus', name: 'Bus / Van', icon: 'bus', iconType: 'material', badge: 'Group', price: 'from ₹45/km' },
 ];
 
-const NEARBY_VEHICLES = [
-  {
-    id: 'v1',
-    name: 'Hyundai Creta 2023',
-    type: 'SUV',
-    transmission: 'Automatic',
-    fuel: 'Petrol',
-    seats: 5,
-    rating: 4.9,
-    trips: 142,
-    price: 89,
-    priceUnit: 'hr',
-    location: 'Connaught Place, Delhi (1.2 km away)',
-    image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
-    available: true,
-  },
-  {
-    id: 'v2',
-    name: 'Maruti Suzuki Swift',
-    type: 'Hatchback',
-    transmission: 'Manual',
-    fuel: 'CNG',
-    seats: 5,
-    rating: 4.7,
-    trips: 210,
-    price: 49,
-    priceUnit: 'hr',
-    location: 'Cyber City, Gurugram (0.8 km away)',
-    image: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=600&q=80',
-    available: true,
-  },
-  {
-    id: 'v3',
-    name: 'Mahindra Thar 4x4',
-    type: 'Adventure SUV',
-    transmission: 'Automatic',
-    fuel: 'Diesel',
-    seats: 4,
-    rating: 4.95,
-    trips: 98,
-    price: 129,
-    priceUnit: 'hr',
-    location: 'Indiranagar, Bengaluru (2.5 km away)',
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80',
-    available: true,
-  },
-];
-
 export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
   const [tripType, setTripType] = useState('self_drive'); // 'self_drive' or 'ride'
   const [pickupLoc, setPickupLoc] = useState('Current Location (Sector 62, Noida)');
   const [dropLoc, setDropLoc] = useState('');
+  const [vehicles, setVehicles] = useState(STATIC_VEHICLES);
+  const [loading, setLoading] = useState(false);
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
+
+  React.useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    getVehicles({ tripType }).then((data) => {
+      if (isMounted && data && data.length > 0) {
+        setVehicles(data);
+      }
+      setLoading(false);
+    });
+    return () => { isMounted = false; };
+  }, [tripType]);
+
 
   return (
     <ResponsiveContainer>
@@ -242,7 +211,7 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
         </View>
 
         <View style={isDesktop ? styles.desktopGrid : null}>
-          {NEARBY_VEHICLES.map((v) => (
+          {vehicles.map((v) => (
             <TouchableOpacity
               key={v.id}
               style={[styles.vehicleCard, isDesktop && styles.desktopVehicleCard]}
