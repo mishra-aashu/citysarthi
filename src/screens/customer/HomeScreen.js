@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -35,6 +35,26 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
   const { width } = useWindowDimensions();
   const { colors, isDark } = useTheme();
   const isDesktop = width >= 768;
+
+  const categoriesScrollRef = useRef(null);
+  const catIndexRef = useRef(0);
+
+  // Auto-slide vehicle categories carousel
+  useEffect(() => {
+    const itemWidth = 124; // 112px width + 12px margin
+    const maxIndex = CATEGORIES.length - 2; // smooth reset to start
+    const interval = setInterval(() => {
+      catIndexRef.current = catIndexRef.current >= maxIndex ? 0 : catIndexRef.current + 1;
+      if (categoriesScrollRef.current) {
+        categoriesScrollRef.current.scrollTo({
+          x: catIndexRef.current * itemWidth,
+          animated: true,
+        });
+      }
+    }, 2600);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -180,7 +200,12 @@ export default function HomeScreen({ onSelectVehicle, onNavigateToTab }) {
             </TouchableOpacity>
           </View>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
+          <ScrollView
+            ref={categoriesScrollRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.categoriesScroll}
+          >
             {CATEGORIES.map((cat) => (
               <TouchableOpacity
                 key={cat.id}
