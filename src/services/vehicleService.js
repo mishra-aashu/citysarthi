@@ -94,7 +94,9 @@ export const getVehicles = async (options = {}) => {
         transmission: v.transmission,
         fuel: v.fuel_type,
         fuel_type: v.fuel_type,
-        seats: v.seats,
+        seats: v.seats || 5,
+        ac: v.is_ac === false ? 'Non-AC' : 'AC',
+        is_ac: v.is_ac !== false,
         rating: v.rating || 4.8,
         trips: v.trips_count || 50,
         price: Number(v.price_per_hour),
@@ -105,6 +107,8 @@ export const getVehicles = async (options = {}) => {
         image: v.image_url,
         available: v.is_available,
         features: v.features || [],
+        driver_name: v.driver_name || 'Rajesh Sharma',
+        driver_phone: v.driver_phone || '+91 98765 43210',
       }));
     }
   } catch (err) {
@@ -138,7 +142,9 @@ export const getVehicleById = async (id) => {
         category: data.category,
         transmission: data.transmission,
         fuel: data.fuel_type,
-        seats: data.seats,
+        seats: data.seats || 5,
+        ac: data.is_ac === false ? 'Non-AC' : 'AC',
+        is_ac: data.is_ac !== false,
         rating: data.rating || 4.8,
         trips: data.trips_count || 50,
         price: Number(data.price_per_hour),
@@ -148,6 +154,8 @@ export const getVehicleById = async (id) => {
         image: data.image_url,
         available: data.is_available,
         features: data.features || [],
+        driver_name: data.driver_name || 'Rajesh Sharma',
+        driver_phone: data.driver_phone || '+91 98765 43210',
       };
     }
   } catch (err) {
