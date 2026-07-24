@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -8,40 +8,72 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 import { useTheme } from '../../context/ThemeContext';
+import { AuthContext } from '../../context/AuthContext';
+import { loginWithGoogle } from '../../services/authService';
 
-export default function RegisterScreen({ onRegisterSuccess, onBackToLogin }) {
+export default function RegisterScreen({ navigation, onRegisterSuccess, onBackToLogin }) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [selectedRole, setSelectedRole] = useState('CUSTOMER'); // 'CUSTOMER', 'HOST', 'DRIVER'
-  const [referralCode, setReferralCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState('CUSTOMER');
+  const [loading, setLoading] = useState(false);
+  const { register } = useContext(AuthContext);
   const { colors } = useTheme();
 
-  const handleRegister = () => {
-    if (!fullName || !phone) {
-      Alert.alert('Required Fields', 'Please enter your full name and mobile number.');
+  const handleBack = () => {
+    if (onBackToLogin) onBackToLogin();
+    else if (navigation?.navigate) navigation.navigate('Login');
+  };
+
+  const handleRegister = async () => {
+    if (!fullName || !email || !password) {
+      Alert.alert('Required Fields', 'Please fill in full name, email, and password.');
       return;
     }
-    Alert.alert('Account Created!', `Welcome to CitySarthi as a ${selectedRole.toLowerCase()}!`, [
-      { text: 'Continue', onPress: () => onRegisterSuccess && onRegisterSuccess() },
-    ]);
+    setLoading(true);
+    const res = await register(email, password, fullName, phone);
+    setLoading(false);
+    if (res.success) {
+      Alert.alert('Account Created! 🎉', `Welcome to CitySarthi as a ${selectedRole.toLowerCase()}!`, [
+        {
+          text: 'Continue',
+          onPress: () => {
+            if (onRegisterSuccess) onRegisterSuccess();
+            else if (navigation?.navigate) navigation.navigate('Main');
+          },
+        },
+      ]);
+    } else {
+      Alert.alert('Registration Failed', res.error || 'Unable to create account');
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setLoading(true);
+    const res = await loginWithGoogle();
+    setLoading(false);
+    if (!res.success) {
+      Alert.alert('Google Sign-Up', res.error || 'Failed to initialize Google signup');
+    }
   };
 
   return (
     <ResponsiveContainer>
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <TouchableOpacity style={[styles.backBtn, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]} onPress={onBackToLogin}>
+          <TouchableOpacity style={[styles.backBtn, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]} onPress={handleBack}>
             <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
           </TouchableOpacity>
 
           <Text style={[styles.title, { color: colors.textPrimary }]}>Create Account</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Join CitySarthi to book vehicles or earn as a host/driver
+            Join CitySarthi to rent vehicles or earn as a host/driver
           </Text>
 
           {/* Role Picker */}
@@ -80,7 +112,7 @@ export default function RegisterScreen({ onRegisterSuccess, onBackToLogin }) {
 
           {/* Form Fields */}
           <View style={styles.form}>
-            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Full Name</Text>
+            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Full Name *</Text>
             <View style={[styles.inputBox, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
               <Ionicons name="person-outline" size={18} color={colors.textMuted} />
               <TextInput
@@ -89,6 +121,20 @@ export default function RegisterScreen({ onRegisterSuccess, onBackToLogin }) {
                 placeholderTextColor={colors.textMuted}
                 value={fullName}
                 onChangeText={setFullName}
+              />
+            </View>
+
+            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Email Address *</Text>
+            <View style={[styles.inputBox, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
+              <Ionicons name="mail-outline" size={18} color={colors.textMuted} />
+              <TextInput
+                style={[styles.input, { color: colors.textPrimary }]}
+                placeholder="name@example.com"
+                placeholderTextColor={colors.textMuted}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 
@@ -106,41 +152,40 @@ export default function RegisterScreen({ onRegisterSuccess, onBackToLogin }) {
               />
             </View>
 
-            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Email Address (Optional)</Text>
+            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Password *</Text>
             <View style={[styles.inputBox, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-              <Ionicons name="mail-outline" size={18} color={colors.textMuted} />
+              <Ionicons name="lock-closed-outline" size={18} color={colors.textMuted} />
               <TextInput
                 style={[styles.input, { color: colors.textPrimary }]}
-                placeholder="name@example.com"
+                placeholder="Min. 6 characters"
                 placeholderTextColor={colors.textMuted}
-                keyboardType="email-address"
-                value={email}
-                onChangeText={setEmail}
-              />
-            </View>
-
-            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Referral Code (Optional)</Text>
-            <View style={[styles.inputBox, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
-              <Ionicons name="gift-outline" size={18} color={colors.accent} />
-              <TextInput
-                style={[styles.input, { color: colors.textPrimary }]}
-                placeholder="Have a promo code? (e.g. CITY250)"
-                placeholderTextColor={colors.textMuted}
-                autoCapitalize="characters"
-                value={referralCode}
-                onChangeText={setReferralCode}
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
               />
             </View>
           </View>
 
-          <TouchableOpacity style={[styles.submitBtn, { backgroundColor: colors.primary }]} onPress={handleRegister}>
-            <Text style={styles.submitBtnText}>Complete Registration</Text>
-            <Ionicons name="checkmark-circle" size={20} color="#000000" />
+          <TouchableOpacity style={[styles.submitBtn, { backgroundColor: colors.primary }]} onPress={handleRegister} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="#000000" />
+            ) : (
+              <>
+                <Text style={styles.submitBtnText}>Complete Registration</Text>
+                <Ionicons name="checkmark-circle" size={20} color="#000000" />
+              </>
+            )}
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.loginLinkRow} onPress={onBackToLogin}>
+          {/* Google Sign up */}
+          <TouchableOpacity style={[styles.googleBtn, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]} onPress={handleGoogleSignup}>
+            <Ionicons name="logo-google" size={20} color="#EA4335" />
+            <Text style={[styles.googleBtnText, { color: colors.textPrimary }]}>Sign Up with Google</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.loginLinkRow} onPress={handleBack}>
             <Text style={[styles.loginText, { color: colors.textMuted }]}>Already have an account? </Text>
-            <Text style={[styles.loginLink, { color: colors.primary }]}>Log In</Text>
+            <Text style={[styles.loginLink, { color: colors.primaryLight }]}>Log In</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
@@ -163,11 +208,11 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
     alignItems: 'center',
-    justify: 'center',
+    justifyContent: 'center',
     gap: 6,
   },
   roleText: { fontSize: 12, fontWeight: '700', textAlign: 'center' },
-  form: { gap: 6, marginBottom: 28 },
+  form: { gap: 4, marginBottom: 24 },
   inputLabel: { fontSize: 12, fontWeight: '700', marginTop: 10 },
   inputBox: {
     flexDirection: 'row',
@@ -182,13 +227,25 @@ const styles = StyleSheet.create({
   submitBtn: {
     flexDirection: 'row',
     height: 52,
-    borderRadius: 28,
+    borderRadius: 26,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
+    marginBottom: 14,
   },
   submitBtnText: { color: '#000000', fontSize: 16, fontWeight: '800' },
-  loginLinkRow: { flexDirection: 'row', justifyContent: 'center', marginTop: 20 },
+  googleBtn: {
+    flexDirection: 'row',
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 16,
+  },
+  googleBtnText: { fontSize: 14, fontWeight: '700' },
+  loginLinkRow: { flexDirection: 'row', justifyContent: 'center', marginTop: 10 },
   loginText: { fontSize: 13 },
-  loginLink: { fontSize: 13, fontWeight: '700' },
+  loginLink: { fontSize: 13, fontWeight: '800' },
 });

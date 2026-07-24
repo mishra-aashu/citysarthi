@@ -12,6 +12,9 @@ import BookingConfirmationScreen from '../screens/customer/BookingConfirmationSc
 import LiveTrackingScreen from '../screens/customer/LiveTrackingScreen';
 import HostDashboardScreen from '../screens/host/HostDashboardScreen';
 import DriverDashboardScreen from '../screens/driver/DriverDashboardScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
+import RegisterScreen from '../screens/auth/RegisterScreen';
+import OTPScreen from '../screens/auth/OTPScreen';
 import BottomTabBar from '../components/navigation/BottomTabBar';
 import DesktopHeader from '../components/navigation/DesktopHeader';
 import { useTheme } from '../context/ThemeContext';
@@ -104,6 +107,47 @@ export default function BottomTabNavigator() {
       );
     }
 
+    if (activeScreen === 'Login') {
+      return (
+        <LoginScreen
+          navigation={{
+            navigate: (screen, params) => {
+              if (screen === 'OTP') navigateTo('OTP', params);
+              else if (screen === 'Register') setActiveScreen('Register');
+              else setActiveScreen('Main');
+            },
+          }}
+        />
+      );
+    }
+
+    if (activeScreen === 'Register') {
+      return (
+        <RegisterScreen
+          navigation={{
+            navigate: (screen) => {
+              if (screen === 'Login') setActiveScreen('Login');
+              else setActiveScreen('Main');
+            },
+          }}
+        />
+      );
+    }
+
+    if (activeScreen === 'OTP') {
+      return (
+        <OTPScreen
+          route={{ params: { phoneNumber: selectedVehicle?.phoneNumber || '+91 98765 43210' } }}
+          navigation={{
+            navigate: () => {
+              setActiveScreen('Main');
+              handleTabChange('Profile');
+            },
+          }}
+        />
+      );
+    }
+
     // Default main tabs
     switch (activeTab) {
       case 'Home':
@@ -115,7 +159,7 @@ export default function BottomTabNavigator() {
       case 'Support':
         return <SupportScreen />;
       case 'Profile':
-        return <ProfileScreen onRoleChange={handleRoleChange} />;
+        return <ProfileScreen onRoleChange={handleRoleChange} onNavigateToLogin={() => setActiveScreen('Login')} />;
       default:
         return <HomeScreen onSelectVehicle={(v) => navigateTo('VehicleDetails', { vehicle: v })} onNavigateToTab={handleTabChange} />;
     }

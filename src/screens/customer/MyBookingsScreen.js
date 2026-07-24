@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -7,53 +7,79 @@ import {
   ScrollView,
   TouchableOpacity,
   useWindowDimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 import { useTheme } from '../../context/ThemeContext';
+import { AuthContext } from '../../context/AuthContext';
+import { getUserBookings } from '../../services/bookingService';
 
-const BOOKINGS = [
+const FALLBACK_BOOKINGS = [
   {
     id: 'CS-88392',
     status: 'ONGOING',
     vehicleName: 'Hyundai Creta 2023',
-    type: 'Self-Drive Rental',
-    startDate: '24 Jul, 10:00 AM',
-    endDate: '25 Jul, 10:00 AM',
-    pickup: 'Sector 62, Noida Hub',
-    amount: '₹2,136',
+    type: 'Catalog Car Rental',
+    startDate: '24 Jul, 09:00 AM',
+    endDate: '24 Jul, 06:00 PM (9 hrs)',
+    pickup: 'Connaught Place, Delhi',
+    amount: '₹801',
     otp: '4921',
+    driver_name: 'Rajesh Sharma',
+    driver_phone: '+91 98765 43210',
   },
   {
     id: 'CS-77210',
     status: 'COMPLETED',
     vehicleName: 'Maruti Suzuki Swift',
-    type: 'Self-Drive Rental',
+    type: 'Catalog Car Rental',
     startDate: '20 Jul, 02:00 PM',
     endDate: '21 Jul, 02:00 PM',
     pickup: 'Cyber City, Gurugram',
     amount: '₹1,299',
-  },
-  {
-    id: 'CS-66104',
-    status: 'COMPLETED',
-    vehicleName: 'Bajaj RE Auto Taxi',
-    type: 'Instant Ride',
-    startDate: '18 Jul, 08:30 PM',
-    endDate: '18 Jul, 09:00 PM',
-    pickup: 'Sector 18 Market -> Sector 62',
-    amount: '₹145',
+    driver_name: 'Amit Verma',
+    driver_phone: '+91 98123 45678',
   },
 ];
 
 export default function MyBookingsScreen({ onTrackBooking }) {
   const { width } = useWindowDimensions();
   const [activeTab, setActiveTab] = useState('Active'); // 'Active' or 'Past'
+  const [bookings, setBookings] = useState(FALLBACK_BOOKINGS);
+  const [loading, setLoading] = useState(false);
   const { colors } = useTheme();
+  const { user } = useContext(AuthContext);
   const isDesktop = width >= 768;
 
-  const activeBookings = BOOKINGS.filter((b) => b.status === 'ONGOING' || b.status === 'UPCOMING');
-  const pastBookings = BOOKINGS.filter((b) => b.status === 'COMPLETED' || b.status === 'CANCELLED');
+  useEffect(() => {
+    fetchBookings();
+  }, [user]);
+
+  const fetchBookings = async () => {
+    setLoading(true);
+    const dbBookings = await getUserBookings(user?.id);
+    if (dbBookings && dbBookings.length > 0) {
+      const formatted = dbBookings.map((b) => ({
+        id: b.booking_number || `CS-${b.id.slice(0, 5)}`,
+        status: b.status || 'CONFIRMED',
+        vehicleName: b.vehicles?.name || 'Catalog Car Rental',
+        type: 'Catalog Car Rental',
+        startDate: new Date(b.start_date).toLocaleDateString() + ' ' + new Date(b.start_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        endDate: new Date(b.end_date).toLocaleDateString() + ' ' + new Date(b.end_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        pickup: b.pickup_location || 'Hub Location',
+        amount: `₹${b.total_price}`,
+        otp: '4921',
+        driver_name: b.vehicles?.driver_name || 'Rajesh Sharma',
+        driver_phone: b.vehicles?.driver_phone || '+91 98765 43210',
+      }));
+      setBookings(formatted);
+    }
+    setLoading(false);
+  };
+
+  const activeBookings = bookings.filter((b) => b.status === 'ONGOING' || b.status === 'CONFIRMED' || b.status === 'UPCOMING');
+  const pastBookings = bookings.filter((b) => b.status === 'COMPLETED' || b.status === 'CANCELLED');
 
   const displayedBookings = activeTab === 'Active' ? activeBookings : pastBookings;
 

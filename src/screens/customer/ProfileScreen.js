@@ -13,6 +13,8 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 import { useTheme } from '../../context/ThemeContext';
 import { getWalletBalance, addWalletMoney } from '../../services/walletService';
@@ -26,9 +28,10 @@ import {
 } from '../../services/profileService';
 import KYCScreen from '../auth/KYCScreen';
 
-export default function ProfileScreen({ onRoleChange, onLogout }) {
+export default function ProfileScreen({ onRoleChange, onLogout, onNavigateToLogin }) {
   const { width } = useWindowDimensions();
   const { colors, themeMode, setThemeMode, isDark } = useTheme();
+  const { user, logout } = useContext(AuthContext);
   const isDesktop = width >= 768;
 
 
@@ -149,19 +152,32 @@ export default function ProfileScreen({ onRoleChange, onLogout }) {
               {/* User Card */}
               <View style={[styles.userCard, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}>
                 <View style={[styles.avatarCircle, { backgroundColor: colors.primary }]}>
-                  <Text style={styles.avatarText}>AS</Text>
+                  <Text style={styles.avatarText}>
+                    {user?.user_metadata?.full_name ? user.user_metadata.full_name.charAt(0).toUpperCase() : (user?.email ? user.email.charAt(0).toUpperCase() : 'CS')}
+                  </Text>
                 </View>
                 <View style={styles.userInfo}>
-                  <Text style={[styles.userName, { color: colors.textPrimary }]}>Aashu Sharma</Text>
-                  <Text style={[styles.userPhone, { color: colors.textMuted }]}>
-                    +91 98765 43210 • aashu@example.com
+                  <Text style={[styles.userName, { color: colors.textPrimary }]}>
+                    {user?.user_metadata?.full_name || user?.email || user?.phone || 'Guest Customer'}
                   </Text>
-                  <TouchableOpacity style={styles.kycBadge} onPress={() => setShowKycModal(true)}>
-                    <Ionicons name="checkmark-seal" size={14} color={colors.success} />
-                    <Text style={[styles.kycText, { color: colors.success }]}>
-                      KYC Verified (Driving License & Aadhaar)
-                    </Text>
-                  </TouchableOpacity>
+                  <Text style={[styles.userPhone, { color: colors.textMuted }]}>
+                    {user ? (user.email || user.phone || 'Verified User') : 'Not logged in • Login to manage bookings'}
+                  </Text>
+                  {user ? (
+                    <TouchableOpacity style={styles.kycBadge} onPress={() => setShowKycModal(true)}>
+                      <Ionicons name="checkmark-seal" size={14} color={colors.success} />
+                      <Text style={[styles.kycText, { color: colors.success }]}>
+                        KYC Verified (Driving License & Aadhaar)
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={{ marginTop: 8, backgroundColor: colors.primary, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, alignSelf: 'flex-start' }}
+                      onPress={() => onNavigateToLogin && onNavigateToLogin()}
+                    >
+                      <Text style={{ color: '#000000', fontWeight: '800', fontSize: 11 }}>Log In / Sign Up Now</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
 
@@ -342,7 +358,14 @@ export default function ProfileScreen({ onRoleChange, onLogout }) {
                   onPress={() => {
                     Alert.alert('Log Out', 'Are you sure you want to log out of CitySarthi?', [
                       { text: 'Cancel', style: 'cancel' },
-                      { text: 'Log Out', style: 'destructive', onPress: () => onLogout && onLogout() },
+                      {
+                        text: 'Log Out',
+                        style: 'destructive',
+                        onPress: async () => {
+                          await logout();
+                          if (onLogout) onLogout();
+                        },
+                      },
                     ]);
                   }}
                 >

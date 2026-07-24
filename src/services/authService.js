@@ -14,6 +14,22 @@ export const loginWithEmail = async (email, password) => {
   }
 };
 
+export const loginWithGoogle = async () => {
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: typeof window !== 'undefined' ? window.location.origin : undefined,
+      },
+    });
+    if (error) throw error;
+    return { success: true, data };
+  } catch (err) {
+    console.error('Google OAuth Login Error:', err.message);
+    return { success: false, error: err.message };
+  }
+};
+
 export const signUpWithEmail = async (email, password, fullName, phone) => {
   try {
     const { data, error } = await supabase.auth.signUp({
