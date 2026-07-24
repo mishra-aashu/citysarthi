@@ -178,7 +178,9 @@ export default function BottomTabNavigator() {
       <View style={styles.content}>
         {renderScreen()}
       </View>
-      <BottomTabBar activeTab={activeTab} onTabChange={handleTabChange} />
+      {activeScreen === 'Main' && (
+        <BottomTabBar activeTab={activeTab} onTabChange={handleTabChange} />
+      )}
     </View>
   );
 }

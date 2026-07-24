@@ -67,6 +67,13 @@ export default function LoginScreen({ navigation }) {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <TouchableOpacity
+          style={[styles.backBtn, { backgroundColor: colors.surface, borderColor: colors.cardBorder }]}
+          onPress={() => navigation?.navigate && navigation.navigate('Main')}
+        >
+          <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
+        </TouchableOpacity>
+
         <View style={[styles.logoCircle, { backgroundColor: 'rgba(243, 163, 20, 0.15)' }]}>
           <Ionicons name="car-sport" size={44} color={colors.primary} />
         </View>
@@ -191,6 +198,16 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { padding: 24, alignItems: 'center', justifyContent: 'center', minHeight: '100%' },
+  backBtn: {
+    alignSelf: 'flex-start',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    marginBottom: 10,
+  },
   logoCircle: {
     width: 84,
     height: 84,
